@@ -28,8 +28,6 @@ class MainWindow(QMainWindow):
 
         #Sets home pic        
         pic_label = QLabel()
-        import os
-        print(os.path.exists("app/images/PICK_home.png"))
         home_page = QPixmap("app/images/PICK_home.png")
         pic_label.setPixmap(home_page.scaled(self.width(),self.height(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.FastTransformation))
 

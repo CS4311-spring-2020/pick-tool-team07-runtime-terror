@@ -4,7 +4,6 @@ class Vector(object):
         self.description = desc
         self.nodes = []
 
-
     def setName(self, name): 
         self.name = name
 

@@ -7,6 +7,7 @@ class VectorManager:
         if VectorManager.__instance == None: 
             VectorManager.__instance = self
             self.vectors = []
+            # TODO: This is bad implementation will change later
             self.curVec = None
         else: 
             raise Exception("Trying to create another instance of a singelton class") 
