@@ -2,6 +2,6 @@ __pycache__/
 
 .vscode/
 
-test.gv
-test.py
-test.ui
+experimentation/
+
+*.gv
