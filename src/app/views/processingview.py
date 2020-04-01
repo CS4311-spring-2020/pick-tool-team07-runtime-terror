@@ -17,6 +17,7 @@ class ProcessingView(QWidget):
         self.parent = parent
         self.title = "Log Processing"
         self.logFileManager = LogFileManager().get_instance()
+        # controller will tell view to update when a new LogFile is created
         self.logFileManager.controller.register(self)
         self.top = 100
         self.left = 100
@@ -34,12 +35,8 @@ class ProcessingView(QWidget):
         self.tableView.setModel(self.model)
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) #resize columns to fit into the widget
 
-        start = QPushButton("Start Analysis")
-        start.clicked.connect(self.update)
-
         self.vBoxLayout = QVBoxLayout()
         self.vBoxLayout.addWidget(self.tableView)
-        self.vBoxLayout.addWidget(start)
         self.setLayout(self.vBoxLayout)
 
     def addToTable(self, logfile):
