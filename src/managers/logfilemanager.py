@@ -30,4 +30,7 @@ class LogFileManager:
         self.logFiles.append(logFile)
         self.controller.update(**{'action':'add', 'data':logFile})
 
+    def getLogFiles(self): 
+        return self.logFiles
+
 

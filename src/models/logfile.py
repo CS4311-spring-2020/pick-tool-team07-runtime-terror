@@ -23,6 +23,9 @@ class LogFile(object):
     def getIngestionStatus(self):
         return self.ingestionStatus
 
+    def setIngestionStatus(self, status): 
+        self.ingestionStatus = status
+
     def getAcknowledgementStatus(self):
         return self.acknowledgementStatus
 
