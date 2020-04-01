@@ -1,7 +1,7 @@
-from PyQt5.QtCore import Qt
-
 import os
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
+
+from PyQt5.QtCore import Qt, QVariant
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPixmap, QIcon
 from PyQt5.QtWidgets import QWidget, QLabel,QCheckBox,QFrame, QGridLayout, QHBoxLayout, QVBoxLayout, QTableView,\
                             QTableWidget, QAbstractScrollArea,  QHeaderView, QMainWindow, QTableWidgetItem, QTabWidget, QListWidget, QLineEdit, QComboBox, QSpacerItem, QSizePolicy, QAction,\
                             QPushButton
@@ -16,6 +16,8 @@ class ProcessingView(QWidget):
         super(QWidget, self).__init__(parent)
         self.parent = parent
         self.title = "Log Processing"
+        self.logFileManager = LogFileManager().get_instance()
+        self.logFileManager.controller.register(self)
         self.top = 100
         self.left = 100
         self.width = 500
@@ -24,7 +26,7 @@ class ProcessingView(QWidget):
 
     def initUI(self):
         self.setWindowTitle(self.title)
-        self.setGeometry(self.top, self.left, self.width, self.height)
+        # self.setGeometry(self.top, self.left, self.width, self.height)
         # self.resize(700, 500)
         self.tableView = QTableView()
         self.model = QStandardItemModel()
@@ -43,9 +45,30 @@ class ProcessingView(QWidget):
     def addToTable(self, logfile):
         name = QStandardItem(logfile.getLogName())
         source = QStandardItem(logfile.getPathToFile())
-        validation = QStandardItem(str(logfile.getValidationStatus()))
-        cleansing = QStandardItem(str(logfile.getLogCleansingStatus()))
-        ingestion = QStandardItem(str(logfile.getIngestionStatus()))
+
+        checkIcon = QIcon()
+        checkIcon.addPixmap(QPixmap("app/images/check.png"), QIcon.Normal, QIcon.Off)
+        errorIcon = QIcon()
+        errorIcon.addPixmap(QPixmap("app/images/error.png"), QIcon.Normal, QIcon.Off)
+        
+        validation = QStandardItem()
+        if logfile.getValidationStatus(): 
+            validation.setIcon(checkIcon)
+        else: 
+            validation.setIcon(errorIcon)
+
+        cleansing = QStandardItem()
+        if logfile.getLogCleansingStatus(): 
+            cleansing.setIcon(checkIcon)
+        else: 
+            cleansing.setIcon(errorIcon)
+        
+        ingestion = QStandardItem()
+        if logfile.getIngestionStatus(): 
+            ingestion.setIcon(checkIcon)
+        else: 
+            ingestion.setIcon(errorIcon)
+        
         self.model.appendRow([
             name, 
             source, 
@@ -62,5 +85,5 @@ class ProcessingView(QWidget):
         pass
     
     def update(self): 
-        self.logfileManager.addLogFile("file.py", "root/", "text")
+        self.logFileManager.addLogFile("file.py", "root/", "text")
         self.parent.updateView(1)
