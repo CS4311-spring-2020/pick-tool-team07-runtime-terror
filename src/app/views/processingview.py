@@ -15,8 +15,6 @@ class ProcessingView(QWidget):
     def __init__(self, parent=None):
         super(QWidget, self).__init__(parent)
         self.parent = parent
-        self.logfileManager = LogFileManager.get_instance()
-        self.logfileManager.controller.register(self)
         self.title = "Log Processing"
         self.top = 100
         self.left = 100
@@ -64,4 +62,5 @@ class ProcessingView(QWidget):
         pass
     
     def update(self): 
+        self.logfileManager.addLogFile("file.py", "root/", "text")
         self.parent.updateView(1)
