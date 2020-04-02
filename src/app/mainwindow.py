@@ -1,5 +1,8 @@
 from PyQt5 import QtCore
+<<<<<<< HEAD
 from PyQt5.QtCore import QThread, pyqtSignal  
+=======
+>>>>>>> b76c6e8c70917cc11d680a95d1fcaf6f76eaa0f4
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMainWindow, QAction, QStackedLayout, QBoxLayout, QWidget,\
                             QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QToolBar, QToolButton
@@ -10,6 +13,7 @@ from app.views.analysisview import AnalysisView
 from app.views.processingview import ProcessingView
 from app.dialogs.projectconfigdialog import ProjectConfigDialog
 
+<<<<<<< HEAD
 from managers.logfilemanager import LogFileManager
 from managers.eventconfigmanager import EventConfigManager
 
@@ -86,11 +90,16 @@ class IngestionThread(QThread):
             logFile.setIngestionStatus(True)
 
 
+=======
+>>>>>>> b76c6e8c70917cc11d680a95d1fcaf6f76eaa0f4
 # TODO: Add save and restoring abilities to the application
 class MainWindow(QMainWindow): 
     def __init__(self):
         super(MainWindow, self).__init__()
+<<<<<<< HEAD
         self.threads = []
+=======
+>>>>>>> b76c6e8c70917cc11d680a95d1fcaf6f76eaa0f4
         self.initUI()
 
     def initUI(self): 
@@ -161,15 +170,19 @@ class MainWindow(QMainWindow):
         if result == QDialog.Accepted: 
             print("Accepted")
             self.analysisView.updateVectorList()
+<<<<<<< HEAD
             thread = CleansingThread()
             thread.logfileadd_callback.connect(self.processingView.addToTable)
             thread.finished.connect(self.cleansingThreadDone)
             thread.start()
             self.threads.append(thread)
+=======
+>>>>>>> b76c6e8c70917cc11d680a95d1fcaf6f76eaa0f4
         else: 
             # Just putting this here in case we need to handel the rejected case
             pass
 
+<<<<<<< HEAD
     def cleansingThreadDone(self):
         print("Im Here")
         thread = IngestionThread()
@@ -177,6 +190,8 @@ class MainWindow(QMainWindow):
         thread.start()
         self.threads.append(thread)
 
+=======
+>>>>>>> b76c6e8c70917cc11d680a95d1fcaf6f76eaa0f4
     def updateView(self, n): 
         self.windowStack.setCurrentIndex(n)
         self.setCentralWidget(self.widget)

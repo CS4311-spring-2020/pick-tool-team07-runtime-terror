@@ -51,7 +51,11 @@ class SplunkClient(object):
         try: 
             filename = os.path.basename(file)
             index.upload(file, **{"rename-source":filename})
+<<<<<<< HEAD
         except Exception as e: 
+=======
+        except e: 
+>>>>>>> b76c6e8c70917cc11d680a95d1fcaf6f76eaa0f4
             print(str(e))
 
     def createIndex(self, name): 
@@ -72,6 +76,7 @@ class SplunkClient(object):
                 break
          
         reader = results.ResultsReader(job.results())
+<<<<<<< HEAD
         res = []
         # Only get necessary data
         for result in reader: 
@@ -84,9 +89,18 @@ class SplunkClient(object):
             res.append(entry)
         return res
 
+=======
+        for result in reader: 
+            # TODO: Parse result data and convert into log entry
+            print(result)
+>>>>>>> b76c6e8c70917cc11d680a95d1fcaf6f76eaa0f4
         
 
 if __name__ == '__main__': 
     splunk = SplunkClient()
     # splunk.upload("/home/eder/Desktop/pick/pick-tool-team07-runtime-terror/test/root/Red/syslog")
+<<<<<<< HEAD
     #splunk.results("/home/eder/Desktop/pick/pick-tool-team07-runtime-terror/test/root/Red/syslog")
+=======
+    splunk.results("/home/eder/Desktop/pick/pick-tool-team07-runtime-terror/test/root/Red/syslog")
+>>>>>>> b76c6e8c70917cc11d680a95d1fcaf6f76eaa0f4
