@@ -28,9 +28,16 @@ class LogFileManager:
         # Create File
         logFile = LogFile(logFileName, pathToFile, typeOfFile)
         self.logFiles.append(logFile)
-        self.controller.update(**{'action':'add', 'data':logFile})
+        #self.controller.update(**{'action':'add', 'data':logFile})
 
     def getLogFiles(self): 
         return self.logFiles
+
+    def getLogFile(self, name):
+        for file in self.logFiles: 
+            if name == file.getLogName(): 
+                return file 
+        return None
+
 
 

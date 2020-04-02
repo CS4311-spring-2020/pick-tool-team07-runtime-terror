@@ -1,30 +1,31 @@
 #import logfilemanager
 print("NICE")
-from eventconfig import EventConfig
-from logfilemanager import LogFileManager
+from managers.eventconfigmanager import EventConfigManager
+from managers.logfilemanager import LogFileManager
 import threading
 import os
 
-class CleansingProcess:
+class CleansingProcess(object):
     def __init__(self):
         #directory where cleansing will be needed 
         #self.directory
-        self.eventConfig = EventConfig()
-        self.logfilemanager = LogFileManager()
-        self.remove_empty()
-        self.createLogFiles()
+        self.eventConfig = EventConfigManager.get_instance().getEventConfig()
+        self.logfilemanager = LogFileManager.get_instance()
         #self.fileList = []
 
+    # Hmm start function also in Ingestionprocess...
+    # Maybe base class needed?
+    def start(self): 
+        self.remove_empty()
+        self.createLogFiles()
+
+        return True
+    
     #Checks to see if file needs cleansing
     def createLogFiles(self):
         print("IN GETFIles")
-        for dirName, subdirList, filelist in os.walk(self.eventConfig.getRootDir, topdown=False):
-            #print(dirName)
+        for dirName, subdirList, filelist in os.walk(self.eventConfig.getRootDir(), topdown=False):
             for fname in filelist:
-                #print("TESTING CREATION OF FILES")
-                #print(fname)
-                #print( dirName + "/" + fname)
-                #print(os.path.splitext(fname)[1])
                 self.logfilemanager.addLogFile(fname, dirName + "/" + fname, os.path.splitext(fname))
         
 
@@ -32,7 +33,7 @@ class CleansingProcess:
     #Files coming from event config
     def remove_empty(self):
         print("IN REMOVE EMPTY")
-        for dirName, subdirList, filelist in os.walk(self.eventConfig.getRootDir, topdown=False):
+        for dirName, subdirList, filelist in os.walk(self.eventConfig.getRootDir(), topdown=False):
             for fname in filelist:
                 if (fname != '.DS_Store'):
                     with open(dirName + "/" + fname) as in_file, open((dirName + "/" + fname), 'r+') as out_file:

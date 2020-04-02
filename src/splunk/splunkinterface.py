@@ -51,7 +51,7 @@ class SplunkClient(object):
         try: 
             filename = os.path.basename(file)
             index.upload(file, **{"rename-source":filename})
-        except e: 
+        except Exception as e: 
             print(str(e))
 
     def createIndex(self, name): 
