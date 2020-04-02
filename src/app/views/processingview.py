@@ -18,11 +18,6 @@ class ProcessingView(QWidget):
         self.title = "Log Processing"
         self.logFileManager = LogFileManager().get_instance()
         # controller will tell view to update when a new LogFile is created
-        self.logFileManager.controller.register(self)
-        self.top = 100
-        self.left = 100
-        self.width = 500
-        self.height = 400
         self.initUI()
 
     def initUI(self):

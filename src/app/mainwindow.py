@@ -1,4 +1,5 @@
 from PyQt5 import QtCore
+from PyQt5.QtCore import QThread, pyqtSignal  
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMainWindow, QAction, QStackedLayout, QBoxLayout, QWidget,\
                             QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QToolBar, QToolButton
@@ -9,10 +10,87 @@ from app.views.analysisview import AnalysisView
 from app.views.processingview import ProcessingView
 from app.dialogs.projectconfigdialog import ProjectConfigDialog
 
+from managers.logfilemanager import LogFileManager
+from managers.eventconfigmanager import EventConfigManager
+
+class CleansingThread(QThread): 
+    logfileadd_callback = pyqtSignal(object)
+
+    def __init__(self): 
+        super(CleansingThread, self).__init__()
+        self.logfilemanager = LogFileManager.get_instance()
+        self.eventConfig = EventConfigManager.get_instance().getEventConfig()
+        
+
+    def run(self): 
+        self.remove_empty()
+        self.createLogFiles()
+
+    def createLogFiles(self):
+        import os
+        print("IN GETFIles")
+        for dirName, subdirList, filelist in os.walk(self.eventConfig.getRootDir(), topdown=False):
+            for fname in filelist:
+                self.logfilemanager.addLogFile(fname, dirName + "/" + fname, os.path.splitext(fname))
+                self.logfilemanager.updateCleanseStatus(fname, True)
+                self.logfileadd_callback.emit(self.logfilemanager.getLogFile(fname))
+
+    def remove_empty(self):
+        import os
+        print("IN REMOVE EMPTY")
+        for dirName, subdirList, filelist in os.walk(self.eventConfig.getRootDir(), topdown=False):
+            for fname in filelist:
+                if (fname != '.DS_Store'):
+                    with open(dirName + "/" + fname) as in_file, open((dirName + "/" + fname), 'r+') as out_file:
+                        print(fname)
+                        out_file.writelines(line for line in in_file if line.strip())
+                        out_file.truncate()
+
+from splunk.splunkinterface import SplunkClient
+from managers.logentrymanager import LogEntryManager
+class IngestionThread(QThread): 
+    logfile_callback = pyqtSignal(object)
+    logentry_callback = pyqtSignal(object)
+
+    def __init__(self):
+        super(IngestionThread, self).__init__()
+        self.splunk = SplunkClient()
+        self.fileManager = LogFileManager.get_instance()
+        self.entryManager = LogEntryManager.get_instance()
+
+    def run(self): 
+        logFiles = self.fileManager.getLogFiles()
+
+        for logFile in logFiles: 
+            if logFile.getIngestionStatus(): 
+                continue
+
+            logFilePath = logFile.getPathToFile()
+            print(logFilePath)
+            self.splunk.upload(logFilePath)
+
+            results = self.splunk.results(logFilePath)
+
+            for result in results: 
+                self.entryManager.addEntry(
+                    result["host"], 
+                    result["timestamp"], 
+                    result["content"], 
+                    result["source"], 
+                    result["sourcetype"] 
+                )
+                self.logentry_callback.emit(
+                    self.entryManager.getEntryByContent(result["content"]))
+
+            # We need some form to verify if we actually got results from splunk
+            logFile.setIngestionStatus(True)
+
+
 # TODO: Add save and restoring abilities to the application
 class MainWindow(QMainWindow): 
     def __init__(self):
         super(MainWindow, self).__init__()
+        self.threads = []
         self.initUI()
 
     def initUI(self): 
@@ -83,9 +161,21 @@ class MainWindow(QMainWindow):
         if result == QDialog.Accepted: 
             print("Accepted")
             self.analysisView.updateVectorList()
+            thread = CleansingThread()
+            thread.logfileadd_callback.connect(self.processingView.addToTable)
+            thread.finished.connect(self.cleansingThreadDone)
+            thread.start()
+            self.threads.append(thread)
         else: 
             # Just putting this here in case we need to handel the rejected case
             pass
+
+    def cleansingThreadDone(self):
+        print("Im Here")
+        thread = IngestionThread()
+        thread.logentry_callback.connect(self.analysisView.addLogEntry)
+        thread.start()
+        self.threads.append(thread)
 
     def updateView(self, n): 
         self.windowStack.setCurrentIndex(n)

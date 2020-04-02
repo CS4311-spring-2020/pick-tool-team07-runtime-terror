@@ -17,11 +17,17 @@ class LogFile(object):
     def getLogCleansingStatus(self):
         return self.cleansingStatus
 
+    def setCleansingStatus(self, status):
+        self.cleansingStatus = status 
+
     def getValidationStatus(self):
         return self.validationStatus
 
     def getIngestionStatus(self):
         return self.ingestionStatus
+
+    def setIngestionStatus(self, status): 
+        self.ingestionStatus = status
 
     def getAcknowledgementStatus(self):
         return self.acknowledgementStatus

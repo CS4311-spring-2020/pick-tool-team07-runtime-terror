@@ -13,8 +13,8 @@ class SplunkClient(object):
     # These attributes is based on the splunk admin account. 
     # Should probably store this information in a config file 
     # and also request this information from the user. 
-    USERNAME = "Enter your credentials"
-    PASSWORD = "Enter your credentials"
+    USERNAME = "eirodriguez5"
+    PASSWORD = "RodH@ker2110"
 
     # TODO: Need to verify if every "Assesment" will need a new index.
     INDEX = "test_app"
@@ -51,7 +51,7 @@ class SplunkClient(object):
         try: 
             filename = os.path.basename(file)
             index.upload(file, **{"rename-source":filename})
-        except e: 
+        except Exception as e: 
             print(str(e))
 
     def createIndex(self, name): 
@@ -72,12 +72,21 @@ class SplunkClient(object):
                 break
          
         reader = results.ResultsReader(job.results())
+        res = []
+        # Only get necessary data
         for result in reader: 
-            # TODO: Parse result data and convert into log entry
-            print(result)
+            entry = dict()
+            entry["timestamp"] = result["_time"]
+            entry["content"] = result["_raw"]
+            entry["host"] = result["host"]
+            entry["source"] = result["source"]
+            entry["sourcetype"] = result["sourcetype"]
+            res.append(entry)
+        return res
+
         
 
 if __name__ == '__main__': 
     splunk = SplunkClient()
     # splunk.upload("/home/eder/Desktop/pick/pick-tool-team07-runtime-terror/test/root/Red/syslog")
-    splunk.results("/home/eder/Desktop/pick/pick-tool-team07-runtime-terror/test/root/Red/syslog")
+    #splunk.results("/home/eder/Desktop/pick/pick-tool-team07-runtime-terror/test/root/Red/syslog")
