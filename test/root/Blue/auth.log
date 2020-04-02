@@ -10,6 +10,7 @@ Aug 19 00:12:38 kali realmd[798]: Loaded settings from: /usr/lib/realmd/realmd-d
 Aug 19 00:12:38 kali realmd[798]: holding daemon: startup
 Aug 19 00:12:38 kali realmd[798]: starting service
 Aug 19 00:12:38 kali realmd[798]: connected to bus
+asdfasfassf
 Aug 19 00:12:38 kali realmd[798]: released daemon: startup
 Aug 19 00:12:38 kali realmd[798]: claimed name on bus: org.freedesktop.realmd
 Aug 19 00:13:39 kali realmd[798]: quitting realmd service after timeout
@@ -1294,6 +1295,7 @@ Oct 18 14:25:01 kali CRON[8404]: pam_unix(cron:session): session closed for user
 Oct 18 14:35:01 kali CRON[8478]: pam_unix(cron:session): session opened for user root by (uid=0)
 Oct 18 14:35:01 kali CRON[8478]: pam_unix(cron:session): session closed for user root
 Oct 18 17:30:51 kali systemd-logind[446]: Power key pressed.
+VERYYYRYRYRYRYRYRYRYYRYRYYRYRYRYRYYRYRYRYNIICICIICICICICICICIECIEIICEICIJNCEINCINICE
 Oct 18 17:30:51 kali systemd-logind[446]: System is powering down.
 Oct 20 14:52:09 kali systemd-logind[443]: New seat seat0.
 Oct 20 14:52:09 kali systemd-logind[443]: Watching system buttons on /dev/input/event2 (Power Button)

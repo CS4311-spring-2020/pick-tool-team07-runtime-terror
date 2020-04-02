@@ -8,6 +8,7 @@
 2019-08-19 06:06:22 status triggers-pending man-db:amd64 2.8.5-2
 2019-08-19 06:06:22 status unpacked eatmydata:all 105-7
 2019-08-19 06:06:22 startup packages configure
+asdfasfsdafsfsd
 2019-08-19 06:06:22 configure libeatmydata1:amd64 105-7 <none>
 2019-08-19 06:06:22 status unpacked libeatmydata1:amd64 105-7
 2019-08-19 06:06:22 status half-configured libeatmydata1:amd64 105-7
