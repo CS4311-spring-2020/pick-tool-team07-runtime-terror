@@ -5,16 +5,10 @@ from managers.vectormanager import VectorManager
 from app.views.graph.graphgenerator import GraphGenerator
 
 from PyQt5.QtCore import Qt, QSize
-<<<<<<< HEAD
 from PyQt5.QtGui import QIcon, QPixmap, QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QWidget, QDialog,QFrame, QGridLayout, QHBoxLayout, QVBoxLayout, QTableView,QTableWidget, QTabWidget,\
                             QListWidget, QListWidgetItem, QLineEdit, QComboBox, QSpacerItem, QSizePolicy, QAction, QAbstractItemView,\
                             QHeaderView
-=======
-from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import QWidget, QDialog,QFrame, QGridLayout, QHBoxLayout, QVBoxLayout, QTableView,QTableWidget, QTabWidget,\
-                            QListWidget, QListWidgetItem, QLineEdit, QComboBox, QSpacerItem, QSizePolicy, QAction, QAbstractItemView
->>>>>>> b76c6e8c70917cc11d680a95d1fcaf6f76eaa0f4
 
 class AnalysisView(QWidget): 
     def __init__(self, parent=None): 
@@ -29,14 +23,11 @@ class AnalysisView(QWidget):
     def setupMainLayout(self): 
         #Log Entries table
         self.logEntriesTbl = QTableView()
-<<<<<<< HEAD
         self.logEntryModel = QStandardItemModel()
         self.logEntryModel.setHorizontalHeaderLabels(['Host', 'Timestamp', 'Content', 'Source', 'Source Type'])
         self.logEntriesTbl.setModel(self.logEntryModel)
         self.logEntriesTbl.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-=======
->>>>>>> b76c6e8c70917cc11d680a95d1fcaf6f76eaa0f4
         self.setupVectorTab()
 
         self.tabWidget = QTabWidget()
@@ -127,7 +118,6 @@ class AnalysisView(QWidget):
             item.setSizeHint(QSize(0, 50))
             self.vectorWidget.addItem(item)
 
-<<<<<<< HEAD
     def addLogEntry(self, logentry):
         print(logentry)
         host = QStandardItem(logentry.getHost())
@@ -145,8 +135,6 @@ class AnalysisView(QWidget):
         ])
         self.logEntriesTbl.setModel(self.logEntryModel)
 
-=======
->>>>>>> b76c6e8c70917cc11d680a95d1fcaf6f76eaa0f4
     def setVectorSelected(self, item): 
         selVecName = item.text()
         print(selVecName)

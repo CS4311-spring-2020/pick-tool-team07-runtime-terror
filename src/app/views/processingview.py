@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QWidget, QLabel,QCheckBox,QFrame, QGridLayout, QHBox
                             QTableWidget, QAbstractScrollArea,  QHeaderView, QMainWindow, QTableWidgetItem, QTabWidget, QListWidget, QLineEdit, QComboBox, QSpacerItem, QSizePolicy, QAction,\
                             QPushButton
 
+from managers.logfilemanager import LogFileManager
 # TODO: This view is missing buttons and also should we change it, so that we make a tab view and we can set the 
 # ActionReport view there? 
 
@@ -14,7 +15,7 @@ class ProcessingView(QWidget):
         super(QWidget, self).__init__(parent)
         self.parent = parent
         self.title = "Log Processing"
-        self.logFileManager = LogFileManager().get_instance()
+        self.logFileManager = LogFileManager.get_instance()
         # controller will tell view to update when a new LogFile is created
         self.initUI()
 
