@@ -31,3 +31,10 @@ class LogEntryManager:
 
         # TODO: Need to add this log entry to log entry database in the case we do 
         # have a db for log entries
+    
+    def getEntryByContent(self, content):   
+        for entry in self.logEntries: 
+            if content == entry.getContent(): 
+                print(entry)
+                return entry
+        return None

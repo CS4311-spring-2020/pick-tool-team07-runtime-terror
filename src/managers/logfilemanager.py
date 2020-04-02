@@ -39,5 +39,9 @@ class LogFileManager:
                 return file 
         return None
 
+    def updateCleanseStatus(self, name, status):
+        for file in self.logFiles: 
+            if name == file.getLogName(): 
+                file.setCleansingStatus(status) 
 
 

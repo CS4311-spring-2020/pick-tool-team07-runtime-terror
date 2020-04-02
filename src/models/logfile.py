@@ -17,6 +17,9 @@ class LogFile(object):
     def getLogCleansingStatus(self):
         return self.cleansingStatus
 
+    def setCleansingStatus(self, status):
+        self.cleansingStatus = status 
+
     def getValidationStatus(self):
         return self.validationStatus
 

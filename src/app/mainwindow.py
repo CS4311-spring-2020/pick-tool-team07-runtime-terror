@@ -14,7 +14,7 @@ from managers.logfilemanager import LogFileManager
 from managers.eventconfigmanager import EventConfigManager
 
 class CleansingThread(QThread): 
-    cleansed = pyqtSignal(object)
+    logfileadd_callback = pyqtSignal(object)
 
     def __init__(self): 
         super(CleansingThread, self).__init__()
@@ -32,7 +32,8 @@ class CleansingThread(QThread):
         for dirName, subdirList, filelist in os.walk(self.eventConfig.getRootDir(), topdown=False):
             for fname in filelist:
                 self.logfilemanager.addLogFile(fname, dirName + "/" + fname, os.path.splitext(fname))
-                self.cleansed.emit(self.logfilemanager.getLogFile(fname))
+                self.logfilemanager.updateCleanseStatus(fname, True)
+                self.logfileadd_callback.emit(self.logfilemanager.getLogFile(fname))
 
     def remove_empty(self):
         import os
@@ -78,7 +79,9 @@ class IngestionThread(QThread):
                     result["source"], 
                     result["sourcetype"] 
                 )
-        
+                self.logentry_callback.emit(
+                    self.entryManager.getEntryByContent(result["content"]))
+
             # We need some form to verify if we actually got results from splunk
             logFile.setIngestionStatus(True)
 
@@ -159,7 +162,7 @@ class MainWindow(QMainWindow):
             print("Accepted")
             self.analysisView.updateVectorList()
             thread = CleansingThread()
-            thread.cleansed.connect(self.processingView.addToTable)
+            thread.logfileadd_callback.connect(self.processingView.addToTable)
             thread.finished.connect(self.cleansingThreadDone)
             thread.start()
             self.threads.append(thread)
@@ -168,8 +171,11 @@ class MainWindow(QMainWindow):
             pass
 
     def cleansingThreadDone(self):
+        print("Im Here")
         thread = IngestionThread()
-        thread.ingestion_callback.connect(self.analysisView.)
+        thread.logentry_callback.connect(self.analysisView.addLogEntry)
+        thread.start()
+        self.threads.append(thread)
 
     def updateView(self, n): 
         self.windowStack.setCurrentIndex(n)
