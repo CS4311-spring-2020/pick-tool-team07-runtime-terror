@@ -10,10 +10,6 @@ class ActionReportView(QWidget):
     def __init__(self, parent=None):
         super(QWidget, self).__init__(parent)
         self.title = "Action Report"
-        self.top = 100
-        self.left = 100
-        self.width = 500
-        self.height = 400
         self.initUI()
 
     def initUI(self):
