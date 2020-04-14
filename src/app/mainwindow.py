@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import QMainWindow, QAction, QStackedLayout, QBoxLayout, QW
 from app.views.analysisview import AnalysisView
 from app.views.processingview import ProcessingView
 from app.dialogs.projectconfigdialog import ProjectConfigDialog
+#import dialog from edit vector configuration for edit Vector Process
+from app.widgets.vectorconfigwidget import VectorConfigWidget
 
 # TODO: Add save and restoring abilities to the application
 class MainWindow(QMainWindow): 
@@ -64,11 +66,17 @@ class MainWindow(QMainWindow):
         self.editConfig = QAction("Edit Configuration", self)
         self.editConfig.triggered.connect(lambda: self.updateView(1))
 
+        #edit vector configuration in menu bar
+        self.editVectorConfig = QAction("Edit Vector Configuration", self)
+        self.editVectorConfig.triggered.connect(self.editVecProcess)
+
         self.menubar = self.menuBar()
         self.filemenu = self.menubar.addMenu("File")
         self.editmenu = self.menubar.addMenu("Edit")
         self.filemenu.addAction(self.newProject)
         self.editmenu.addAction(self.editConfig)
+        #place edit vector configuration option in the menu bar
+        self.editmenu.addAction(self.editVectorConfig)
 
     def keyPress(self, e): 
         pass
@@ -86,6 +94,31 @@ class MainWindow(QMainWindow):
         else: 
             # Just putting this here in case we need to handel the rejected case
             pass
+
+    def editVecProcess(self):
+        from PyQt5.QtWidgets import QDialog
+        #first create the dialog object
+        dialog = QDialog(self)
+        # create a new container with a horizontal 
+        # layout that we will add vector editor to so we can 
+        # add that to the qdialog 
+        container = QHBoxLayout()
+        # create a new instance of the the vector config widget
+        newVectorEditDialog = VectorConfigWidget(self)
+        # then place the instance of the new widget into the 
+        # container with the horizontal layout
+        container.addWidget(newVectorEditDialog)
+        # create push button
+        doneBtn = QPushButton("Done")
+        # add the button to the container
+        container.addWidget(doneBtn)
+        #apply layout to dailog
+        dialog.setLayout(container) 
+        # how to add layout to qdialog
+        #newVectorEditDialog.exec() #dialog.exec()
+        #show event loop using dialog.exec()
+        dialog.exec()
+
 
     def updateView(self, n): 
         self.windowStack.setCurrentIndex(n)
