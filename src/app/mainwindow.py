@@ -109,7 +109,7 @@ class MainWindow(QMainWindow):
         # container with the horizontal layout
         container.addWidget(newVectorEditDialog)
         # create push button
-        doneBtn = QPushButton("Done")
+        doneBtn = QPushButton("Done",self)
         # add the button to the container
         container.addWidget(doneBtn)
         #apply layout to dailog
@@ -118,6 +118,7 @@ class MainWindow(QMainWindow):
         #newVectorEditDialog.exec() #dialog.exec()
         #show event loop using dialog.exec()
         dialog.exec()
+        doneBtn.clicked.connect(dialog.accept)
 
 
     def updateView(self, n): 
