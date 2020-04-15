@@ -2,7 +2,7 @@ import sys
 sys.path.append("../..")
 from managers.vectormanager import VectorManager
 
-from app.views.graph.graphgenerator import GraphGenerator
+from app.views.graph.graphwidget import GraphWidget
 
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QIcon, QPixmap, QStandardItemModel, QStandardItem
@@ -69,9 +69,7 @@ class AnalysisView(QWidget):
         self.mainLayout.addLayout(self.workspace)
 
     def setupVectorTab(self): 
-        self.graph = QWidget()
-        self.graph.setLayout(QVBoxLayout())
-        self.setupGraph()
+        self.graph = GraphWidget()
         self.nodes = QTableView()
 
         self.vectorViews = QHBoxLayout()
@@ -96,16 +94,6 @@ class AnalysisView(QWidget):
 
         self.vectorTab = QWidget()
         self.vectorTab.setLayout(self.container)
-
-    def setupGraph(self): 
-        graph = self.graph
-        graphGenerator = GraphGenerator()
-        selectedVector = self.vectorManager.getCurrentVector()
-        if selectedVector: 
-            graphGenerator.generateVectorGraph(selectedVector)
-        graphGenerator.build()
-        qgv = graphGenerator.getGraph()
-        graph.layout().addWidget(qgv)
 
     def updateVectorList(self):
         vectors = self.vectorManager.getVectors()
