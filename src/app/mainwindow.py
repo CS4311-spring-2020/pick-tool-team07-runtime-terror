@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QMainWindow, QAction, QStackedLayout, QBoxLayout, QW
 
 from app.views.analysisview import AnalysisView
 from app.views.processingview import ProcessingView
+from app.views.actionReportView import ActionReportView
 from app.dialogs.projectconfigdialog import ProjectConfigDialog
 
 from managers.logfilemanager import LogFileManager
@@ -85,7 +86,6 @@ class IngestionThread(QThread):
             # We need some form to verify if we actually got results from splunk
             logFile.setIngestionStatus(True)
 
-
 # TODO: Add save and restoring abilities to the application
 class MainWindow(QMainWindow): 
     def __init__(self):
@@ -103,6 +103,7 @@ class MainWindow(QMainWindow):
 
         self.analysisView = AnalysisView(self)
         self.processingView = ProcessingView(self)
+        self.actionreportview = ActionReportView(self)
 
         #Sets home pic        
         pic_label = QLabel()
@@ -112,6 +113,7 @@ class MainWindow(QMainWindow):
         self.windowStack.addWidget(pic_label)
         self.windowStack.addWidget(self.analysisView)
         self.windowStack.addWidget(self.processingView)
+        self.windowStack.addWidget(self.actionreportview)
 
         self.widget = QWidget()
         self.widget.setLayout(self.windowStack)
@@ -127,9 +129,15 @@ class MainWindow(QMainWindow):
         analysisView.setText("Analysis View")
         analysisView.clicked.connect(lambda: self.updateView(1))
 
+        actionreportView = QToolButton()
+        actionreportView.setText("Action Report")
+        actionreportView.clicked.connect(lambda: self.updateView(3))
+
+
         toolBar = QToolBar()
         toolBar.addWidget(logProcessingView)
         toolBar.addWidget(analysisView)
+        toolBar.addWidget(actionreportView)
 
         self.toolbar = self.addToolBar(toolBar)
 
