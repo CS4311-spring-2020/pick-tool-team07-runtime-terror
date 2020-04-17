@@ -118,8 +118,8 @@ class MainWindow(QMainWindow):
         #newVectorEditDialog.exec() #dialog.exec()
         #show event loop using dialog.exec()
         dialog.exec()
-        doneBtn.clicked.connect(dialog.accept)
-
+        #doneBtn.clicked.connect(dialog.accept)
+        doneBtn.clicked.connect(lambda: dialog.accept)
 
     def updateView(self, n): 
         self.windowStack.setCurrentIndex(n)
