@@ -66,7 +66,6 @@ class MainWindow(QMainWindow):
         self.editConfig = QAction("Edit Configuration", self)
         self.editConfig.triggered.connect(lambda: self.updateView(1))
 
-        #edit vector configuration in menu bar
         self.editVectorConfig = QAction("Edit Vector Configuration", self)
         self.editVectorConfig.triggered.connect(self.editVecProcess)
 
@@ -75,7 +74,6 @@ class MainWindow(QMainWindow):
         self.editmenu = self.menubar.addMenu("Edit")
         self.filemenu.addAction(self.newProject)
         self.editmenu.addAction(self.editConfig)
-        #place edit vector configuration option in the menu bar
         self.editmenu.addAction(self.editVectorConfig)
 
     def keyPress(self, e): 
@@ -97,25 +95,13 @@ class MainWindow(QMainWindow):
 
     def editVecProcess(self):
         from PyQt5.QtWidgets import QDialog
-        #first create the dialog object
         dialog = QDialog(self)
-        # create a new container with a horizontal 
-        # layout that we will add vector editor to so we can 
-        # add that to the qdialog 
         container = QHBoxLayout()
-        # create a new instance of the the vector config widget
         newVectorEditDialog = VectorConfigWidget(self)
-        # then place the instance of the new widget into the 
-        # container with the horizontal layout
         container.addWidget(newVectorEditDialog)
-        # create push button
         doneBtn = QPushButton("Done",self)
-        # add the button to the container
         container.addWidget(doneBtn)
-        #apply layout to dailog
         dialog.setLayout(container) 
-        # how to add layout to qdialog
-        #show event loop using dialog.exec()
         doneBtn.clicked.connect(lambda: dialog.accept())
         dialog.exec()
         
