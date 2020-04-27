@@ -115,11 +115,11 @@ class MainWindow(QMainWindow):
         #apply layout to dailog
         dialog.setLayout(container) 
         # how to add layout to qdialog
-        #newVectorEditDialog.exec() #dialog.exec()
         #show event loop using dialog.exec()
+        doneBtn.clicked.connect(lambda: dialog.accept())
         dialog.exec()
-        #doneBtn.clicked.connect(dialog.accept)
-        doneBtn.clicked.connect(lambda: dialog.accept)
+        
+        
 
     def updateView(self, n): 
         self.windowStack.setCurrentIndex(n)
