@@ -10,6 +10,8 @@ from app.views.analysisview import AnalysisView
 from app.views.processingview import ProcessingView
 from app.views.actionReportView import ActionReportView
 from app.dialogs.projectconfigdialog import ProjectConfigDialog
+#import dialog from edit vector configuration for edit Vector Process
+from app.widgets.vectorconfigwidget import VectorConfigWidget
 
 from managers.logfilemanager import LogFileManager
 from managers.eventconfigmanager import EventConfigManager
@@ -150,11 +152,15 @@ class MainWindow(QMainWindow):
         self.editConfig = QAction("Edit Configuration", self)
         self.editConfig.triggered.connect(lambda: self.updateView(1))
 
+        self.editVectorConfig = QAction("Edit Vector Configuration", self)
+        self.editVectorConfig.triggered.connect(self.editVecProcess)
+
         self.menubar = self.menuBar()
         self.filemenu = self.menubar.addMenu("File")
         self.editmenu = self.menubar.addMenu("Edit")
         self.filemenu.addAction(self.newProject)
         self.editmenu.addAction(self.editConfig)
+        self.editmenu.addAction(self.editVectorConfig)
 
     def keyPress(self, e): 
         pass
@@ -178,6 +184,18 @@ class MainWindow(QMainWindow):
             # Just putting this here in case we need to handel the rejected case
             pass
 
+    def editVecProcess(self):
+        from PyQt5.QtWidgets import QDialog
+        dialog = QDialog(self)
+        container = QHBoxLayout()
+        newVectorEditDialog = VectorConfigWidget(self)
+        container.addWidget(newVectorEditDialog)
+        doneBtn = QPushButton("Done",self)
+        container.addWidget(doneBtn)
+        dialog.setLayout(container) 
+        doneBtn.clicked.connect(lambda: dialog.accept())
+        dialog.exec()
+        
     def cleansingThreadDone(self):
         print("Im Here")
         thread = IngestionThread()

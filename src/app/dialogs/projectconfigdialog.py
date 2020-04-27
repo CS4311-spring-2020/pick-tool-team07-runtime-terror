@@ -2,7 +2,7 @@ import sys
 sys.path.append("../..")
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayout, QHBoxLayout, QPushButton, QSpacerItem, QSizePolicy
+from PyQt5.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayout, QHBoxLayout, QPushButton, QSpacerItem, QSizePolicy, QMessageBox
 
 from managers.eventconfigmanager import EventConfigManager
 
