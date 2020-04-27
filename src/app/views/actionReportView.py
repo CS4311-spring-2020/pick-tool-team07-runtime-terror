@@ -26,3 +26,11 @@ class ActionReportView(QWidget):
         self.vBoxLayout = QVBoxLayout()
         self.vBoxLayout.addWidget(self.tableview)
         self.setLayout(self.vBoxLayout)
+
+        filename = QStandardItem("auth.log")
+        filepath = QStandardItem("/home/eder/Desktop/pick/pick-tool-team07-runtime-terror/test/root/Blue")
+        message = QStandardItem("cannot parse character")
+        errorline = QStandardItem("23")
+
+        self.model.appendRow([filename, filepath, message, errorline])
+        self.tableview.setModel(self.model)

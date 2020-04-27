@@ -19,7 +19,7 @@ class CleansingThread(QThread):
 
     def __init__(self): 
         super(CleansingThread, self).__init__()
-        self.logfilemanager = LogFileManager.get_instance()
+        self.logfilemanager = LogFileManager()
         self.eventConfig = EventConfigManager.get_instance().getEventConfig()
         
 
@@ -56,7 +56,7 @@ class IngestionThread(QThread):
     def __init__(self):
         super(IngestionThread, self).__init__()
         self.splunk = SplunkClient()
-        self.fileManager = LogFileManager.get_instance()
+        self.fileManager = LogFileManager()
         self.entryManager = LogEntryManager.get_instance()
 
     def run(self): 
@@ -106,11 +106,11 @@ class MainWindow(QMainWindow):
         self.actionreportview = ActionReportView(self)
 
         #Sets home pic        
-        pic_label = QLabel()
-        home_page = QPixmap("app/images/PICK_home.png")
-        pic_label.setPixmap(home_page.scaled(self.width(),self.height(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.FastTransformation))
+        # pic_label = QLabel()
+        # home_page = QPixmap("app/images/PICK_home.png")
+        # pic_label.setPixmap(home_page.scaled(self.width(),self.height(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.FastTransformation))
 
-        self.windowStack.addWidget(pic_label)
+        # self.windowStack.addWidget(pic_label)
         self.windowStack.addWidget(self.analysisView)
         self.windowStack.addWidget(self.processingView)
         self.windowStack.addWidget(self.actionreportview)
@@ -123,15 +123,15 @@ class MainWindow(QMainWindow):
     def setupToolBar(self):
         logProcessingView = QToolButton()
         logProcessingView.setText("Log Processing View")
-        logProcessingView.clicked.connect(lambda: self.updateView(2))
+        logProcessingView.clicked.connect(lambda: self.updateView(1))
         
         analysisView = QToolButton()
         analysisView.setText("Analysis View")
-        analysisView.clicked.connect(lambda: self.updateView(1))
+        analysisView.clicked.connect(lambda: self.updateView(0))
 
         actionreportView = QToolButton()
         actionreportView.setText("Action Report")
-        actionreportView.clicked.connect(lambda: self.updateView(3))
+        actionreportView.clicked.connect(lambda: self.updateView(2))
 
 
         toolBar = QToolBar()
