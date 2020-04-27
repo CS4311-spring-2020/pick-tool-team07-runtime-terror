@@ -2,17 +2,18 @@ import sys
 sys.path.append("../..")
 from managers.vectormanager import VectorManager
 
-from app.views.graph.graphgenerator import GraphGenerator
+from app.views.graph.graphwidget import GraphWidget
 
 from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QWidget, QDialog,QFrame, QGridLayout, QHBoxLayout, QVBoxLayout, QTableView,QTableWidget, QTabWidget,\
-                            QListWidget, QListWidgetItem, QLineEdit, QComboBox, QSpacerItem, QSizePolicy, QAction, QAbstractItemView
+                            QListWidget, QListWidgetItem, QLineEdit, QComboBox, QSpacerItem, QSizePolicy, QAction, QAbstractItemView,\
+                            QHeaderView
 
 class AnalysisView(QWidget): 
     def __init__(self, parent=None): 
         super(QWidget, self).__init__(parent)
-        self.vectorManager = VectorManager.get_instance()
+        self.vectorManager = VectorManager()
         self.initUI()
 
     def initUI(self): 
@@ -22,6 +23,11 @@ class AnalysisView(QWidget):
     def setupMainLayout(self): 
         #Log Entries table
         self.logEntriesTbl = QTableView()
+        self.logEntryModel = QStandardItemModel()
+        self.logEntryModel.setHorizontalHeaderLabels(['Host', 'Timestamp', 'Content', 'Source', 'Source Type'])
+        self.logEntriesTbl.setModel(self.logEntryModel)
+        self.logEntriesTbl.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
         self.setupVectorTab()
 
         self.tabWidget = QTabWidget()
@@ -63,9 +69,7 @@ class AnalysisView(QWidget):
         self.mainLayout.addLayout(self.workspace)
 
     def setupVectorTab(self): 
-        self.graph = QWidget()
-        self.graph.setLayout(QVBoxLayout())
-        self.setupGraph()
+        self.graph = GraphWidget()
         self.nodes = QTableView()
 
         self.vectorViews = QHBoxLayout()
@@ -91,16 +95,6 @@ class AnalysisView(QWidget):
         self.vectorTab = QWidget()
         self.vectorTab.setLayout(self.container)
 
-    def setupGraph(self): 
-        graph = self.graph
-        graphGenerator = GraphGenerator()
-        selectedVector = self.vectorManager.getCurrentVector()
-        if selectedVector: 
-            graphGenerator.generateVectorGraph(selectedVector)
-        graphGenerator.build()
-        qgv = graphGenerator.getGraph()
-        graph.layout().addWidget(qgv)
-
     def updateVectorList(self):
         vectors = self.vectorManager.getVectors()
         for vector in vectors: 
@@ -111,6 +105,23 @@ class AnalysisView(QWidget):
             item.setIcon(icon)
             item.setSizeHint(QSize(0, 50))
             self.vectorWidget.addItem(item)
+
+    def addLogEntry(self, logentry):
+        print(logentry)
+        host = QStandardItem(logentry.getHost())
+        timestamp = QStandardItem(logentry.getTimestamp())
+        content = QStandardItem(logentry.getContent())
+        source = QStandardItem(logentry.getSource())
+        sourcetype = QStandardItem(logentry.getSourceType())
+
+        self.logEntryModel.appendRow([
+            host,
+            timestamp, 
+            content,
+            source,
+            sourcetype
+        ])
+        self.logEntriesTbl.setModel(self.logEntryModel)
 
     def setVectorSelected(self, item): 
         selVecName = item.text()
