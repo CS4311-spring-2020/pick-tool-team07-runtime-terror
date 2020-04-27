@@ -62,22 +62,8 @@ class ProjectConfigDialog(QDialog):
 
     def start(self):
         # TODO: Verify that all configuration is correctly setup
-        #attempt
-        msg = QMessageBox()
-        msg.setWindowTitle("warning")
-        msg.setText("stop")
-        msg.setIcon(QMessageBox.Question)
-        msg.setStandardButtons(QMessageBox.Cancel|QMessageBox.Retry|QMessageBox.Ignore)
-        answer = msg.exec()
-        if answer == QMessageBox.Cancel:
-            msg.close()
-        elif answer == QMessageBox.Ignore:
-            self.parent.updateView(2)
-            self.accept()
-            msg.accept()
-        #attempt
-        #self.parent.updateView(2)
-        #self.accept()
+        self.parent.updateView(2)
+        self.accept()
         # self.done(0)
 
     def cancel(self): 
