@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QWidget, QDialog,QFrame, QGridLayout, QHBoxLayout, Q
 class AnalysisView(QWidget): 
     def __init__(self, parent=None): 
         super(QWidget, self).__init__(parent)
-        self.vectorManager = VectorManager.get_instance()
+        self.vectorManager = VectorManager()
         self.initUI()
 
     def initUI(self): 

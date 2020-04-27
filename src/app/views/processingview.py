@@ -15,7 +15,7 @@ class ProcessingView(QWidget):
         super(QWidget, self).__init__(parent)
         self.parent = parent
         self.title = "Log Processing"
-        self.logFileManager = LogFileManager.get_instance()
+        self.logFileManager = LogFileManager()
         # controller will tell view to update when a new LogFile is created
         self.initUI()
 
