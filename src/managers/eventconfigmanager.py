@@ -1,6 +1,8 @@
 import sys
 sys.path.append('..')
 
+from utils.config import ConfigManager
+
 from models.eventconfig import EventConfig
 
 class EventConfigManager: 
@@ -37,3 +39,40 @@ class EventConfigManager:
 
     def getEventConfig(self): 
         return self.eventconfig
+
+    def save(self): 
+        config = ConfigManager()
+        config.writeConfig(
+            "EVENT",
+            {
+                "Name": self.eventconfig.getName(), 
+                "Description": self.eventconfig.getDesc(), 
+                "StartTime": self.eventconfig.getStart().strftime("%m/%d/%Y, %H:%M:%S"),
+                "EndTime": self.eventconfig.getEnd().strftime("%m/%d/%Y, %H:%M:%S"), 
+                "Lead": self.eventconfig.getLead(),
+                "LeadIp": self.eventconfig.getLeadIp(), 
+                "Connections": self.eventconfig.getConnections(),
+                "Root": self.eventconfig.getRootDir(), 
+                "Red": self.eventconfig.getRed(), 
+                "Blue": self.eventconfig.getBlue(), 
+                "White": self.eventconfig.getWhite()
+            }
+        )
+
+    def restore(self): 
+        config = ConfigManager()
+        result = config.getConfig("EVENT")
+
+        self.eventconfig.setName(result["Name"])
+        self.eventconfig.setDesc(result["Description"])
+        self.eventconfig.setStart(result["StartTime"])
+        self.eventconfig.setEnd(result["EndTime"])
+
+        self.eventconfig.setLead(result["Lead"])
+        self.eventconfig.setLeadIp(result["LeadIp"])
+        self.eventconfig.setConnections(result["Connection"])
+
+        self.eventconfig.setRootDir(result["Root"])
+        self.eventconfig.setRed(result["Red"])
+        self.eventconfig.setBlue(result["Blue"])
+        self.eventconfig.setWhite(result["White"])
