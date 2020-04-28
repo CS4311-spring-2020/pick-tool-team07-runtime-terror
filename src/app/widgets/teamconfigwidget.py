@@ -46,4 +46,8 @@ class TeamConfigWidget(QWidget):
     def connect(self): 
         #TODO: There will be a different interpretation of how this will be handled if 
         # the lead clicks connect.
-        pass
+        self.eventConfigManager.setTeamAttributes(
+            "True" if self.leadRbtn.isChecked() else "False", 
+            self.leadIp.text(), 
+            "None"
+        )

@@ -2,7 +2,7 @@ import sys
 sys.path.append("../..")
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayout, QHBoxLayout, QPushButton, QSpacerItem, QSizePolicy
+from PyQt5.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayout, QHBoxLayout, QPushButton, QSpacerItem, QSizePolicy, QMessageBox
 
 from managers.eventconfigmanager import EventConfigManager
 
@@ -62,7 +62,7 @@ class ProjectConfigDialog(QDialog):
 
     def start(self):
         # TODO: Verify that all configuration is correctly setup
-        self.parent.updateView(2)
+        self.parent.updateView(1)
         self.accept()
         # self.done(0)
 
