@@ -41,7 +41,6 @@ class EventConfigManager:
         return self.eventconfig
 
     def save(self): 
-        print(self.eventconfig)
         config = ConfigManager()
         config.writeConfig(
             "EVENT",
@@ -59,3 +58,21 @@ class EventConfigManager:
                 "White": self.eventconfig.getWhite()
             }
         )
+
+    def restore(self): 
+        config = ConfigManager()
+        result = config.getConfig("EVENT")
+
+        self.eventconfig.setName(result["Name"])
+        self.eventconfig.setDesc(result["Description"])
+        self.eventconfig.setStart(result["StartTime"])
+        self.eventconfig.setEnd(result["EndTime"])
+
+        self.eventconfig.setLead(result["Lead"])
+        self.eventconfig.setLeadIp(result["LeadIp"])
+        self.eventconfig.setConnections(result["Connection"])
+
+        self.eventconfig.setRootDir(result["Root"])
+        self.eventconfig.setRed(result["Red"])
+        self.eventconfig.setBlue(result["Blue"])
+        self.eventconfig.setWhite(result["White"])

@@ -78,6 +78,3 @@ class EventConfig(object):
 
     def getConnections(self):
         return self.connections
-
-    def __str__(self): 
-        return "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n"%(self.name, self.desc, self.start, self.end, self.lead, self.leadIp, self.connections, self.rootDir, self.redFolder, self.blueFolder, self.whiteFolder)
