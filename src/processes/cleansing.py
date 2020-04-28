@@ -5,12 +5,12 @@ from managers.eventconfigmanager import EventConfigManager
 
 class CleansingThread(QThread): 
     logfileadd_callback = pyqtSignal(object)
+    # TODO add error callback, so that we could add it to action report
 
     def __init__(self): 
         super(CleansingThread, self).__init__()
-        self.logfilemanager = LogFileManager.get_instance()
+        self.logfilemanager = LogFileManager()
         self.eventConfig = EventConfigManager.get_instance().getEventConfig()
-        
 
     def run(self): 
         self.remove_empty()
@@ -18,7 +18,6 @@ class CleansingThread(QThread):
 
     def createLogFiles(self):
         import os
-        print("IN GETFIles")
         for dirName, subdirList, filelist in os.walk(self.eventConfig.getRootDir(), topdown=False):
             for fname in filelist:
                 self.logfilemanager.addLogFile(fname, dirName + "/" + fname, os.path.splitext(fname))
@@ -31,6 +30,5 @@ class CleansingThread(QThread):
             for fname in filelist:
                 if (fname != '.DS_Store'):
                     with open(dirName + "/" + fname) as in_file, open((dirName + "/" + fname), 'r+') as out_file:
-                        print(fname)
                         out_file.writelines(line for line in in_file if line.strip())
                         out_file.truncate()

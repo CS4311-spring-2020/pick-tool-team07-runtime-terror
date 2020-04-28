@@ -12,7 +12,7 @@ class IngestionThread(QThread):
     def __init__(self):
         super(IngestionThread, self).__init__()
         self.splunk = SplunkClient()
-        self.fileManager = LogFileManager.get_instance()
+        self.fileManager = LogFileManager()
         self.entryManager = LogEntryManager.get_instance()
 
     def run(self): 

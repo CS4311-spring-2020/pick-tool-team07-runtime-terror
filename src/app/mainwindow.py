@@ -13,6 +13,8 @@ from app.widgets.vectorconfigwidget import VectorConfigWidget
 from processes.cleansing import CleansingThread
 from processes.ingestion import IngestionThread
 
+from managers.eventconfigmanager import EventConfigManager
+
 # TODO: Add save and restoring abilities to the application
 class MainWindow(QMainWindow): 
     def __init__(self):
@@ -86,9 +88,6 @@ class MainWindow(QMainWindow):
         self.filemenu.addAction(self.newProject)
         self.editmenu.addAction(self.editConfig)
         self.editmenu.addAction(self.editVectorConfig)
-
-    def keyPress(self, e): 
-        pass
     
     def newProjectProcess(self):
         from PyQt5.QtWidgets import QDialog
@@ -100,6 +99,8 @@ class MainWindow(QMainWindow):
         if result == QDialog.Accepted: 
             EventConfigManager.get_instance().save()
             self.analysisView.updateVectorList()
+
+            # TODO Start all processing threads
             thread = CleansingThread()
             thread.logfileadd_callback.connect(self.processingView.addToTable)
             thread.finished.connect(self.cleansingThreadDone)
@@ -122,7 +123,6 @@ class MainWindow(QMainWindow):
         dialog.exec()
         
     def cleansingThreadDone(self):
-        print("Im Here")
         thread = IngestionThread()
         thread.logentry_callback.connect(self.analysisView.addLogEntry)
         thread.start()
