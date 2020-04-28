@@ -167,7 +167,7 @@ class MainWindow(QMainWindow):
         result = newProjectDialog.result()
 
         if result == QDialog.Accepted: 
-            print("Accepted")
+            EventConfigManager.get_instance().save()
             self.analysisView.updateVectorList()
             thread = CleansingThread()
             thread.logfileadd_callback.connect(self.processingView.addToTable)

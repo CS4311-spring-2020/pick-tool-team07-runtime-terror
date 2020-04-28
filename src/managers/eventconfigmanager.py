@@ -1,6 +1,8 @@
 import sys
 sys.path.append('..')
 
+from utils.config import ConfigManager
+
 from models.eventconfig import EventConfig
 
 class EventConfigManager: 
@@ -37,3 +39,23 @@ class EventConfigManager:
 
     def getEventConfig(self): 
         return self.eventconfig
+
+    def save(self): 
+        print(self.eventconfig)
+        config = ConfigManager()
+        config.writeConfig(
+            "EVENT",
+            {
+                "Name": self.eventconfig.getName(), 
+                "Description": self.eventconfig.getDesc(), 
+                "StartTime": self.eventconfig.getStart().strftime("%m/%d/%Y, %H:%M:%S"),
+                "EndTime": self.eventconfig.getEnd().strftime("%m/%d/%Y, %H:%M:%S"), 
+                "Lead": self.eventconfig.getLead(),
+                "LeadIp": self.eventconfig.getLeadIp(), 
+                "Connections": self.eventconfig.getConnections(),
+                "Root": self.eventconfig.getRootDir(), 
+                "Red": self.eventconfig.getRed(), 
+                "Blue": self.eventconfig.getBlue(), 
+                "White": self.eventconfig.getWhite()
+            }
+        )
