@@ -38,9 +38,9 @@ class LogFileManager(DataBaseManager):
             "name": logFileName,
             "path": pathToFile,
             "type": typeOfFile, 
-            "cleansingStatus": False,  
-            "validationStatus": False, 
-            "ingestionStatus": False, 
+            "cleansingStatus": "null",  
+            "validationStatus": "null", 
+            "ingestionStatus": "null", 
             "acknowledgementStatus": False
         }
         

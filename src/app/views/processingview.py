@@ -1,7 +1,7 @@
 import os
 
 from PyQt5.QtCore import Qt, QVariant
-from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPixmap, QIcon
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPixmap, QIcon, QBrush, QColor
 from PyQt5.QtWidgets import QWidget, QLabel,QCheckBox,QFrame, QGridLayout, QHBoxLayout, QVBoxLayout, QTableView,\
                             QTableWidget, QAbstractScrollArea,  QHeaderView, QMainWindow, QTableWidgetItem, QTabWidget, QListWidget, QLineEdit, QComboBox, QSpacerItem, QSizePolicy, QAction,\
                             QPushButton
@@ -35,30 +35,43 @@ class ProcessingView(QWidget):
 
     def addToTable(self, logfile):
         name = QStandardItem(logfile.getLogName())
-        source = QStandardItem(logfile.getPathToFile())
+        source = QStandardItem(logfile.getPathToFile()) 
 
-        checkIcon = QIcon()
-        checkIcon.addPixmap(QPixmap("app/images/check.png"), QIcon.Normal, QIcon.Off)
-        errorIcon = QIcon()
-        errorIcon.addPixmap(QPixmap("app/images/error.png"), QIcon.Normal, QIcon.Off)
-        
+
+        # Wrost implementation of all but this will do, probably should
+        # be changed
         validation = QStandardItem()
-        if logfile.getValidationStatus(): 
-            validation.setIcon(checkIcon)
+        if logfile.getValidationStatus() == "null": 
+            validation.setText("IN-PROGRESS")
+            validation.setBackground(QBrush(QColor("yellow")))
+        elif not logfile.getValidationStatus(): 
+            validation.setText("FAILED")
+            validation.setBackground(QBrush(QColor("red")))
         else: 
-            validation.setIcon(errorIcon)
+            validation.setText("PASSED")
+            validation.setBackground(QBrush(QColor("green")))
 
         cleansing = QStandardItem()
-        if logfile.getLogCleansingStatus(): 
-            cleansing.setIcon(checkIcon)
+        if logfile.getLogCleansingStatus() == "null": 
+            cleansing.setText("IN-PROGRESS")
+            cleansing.setBackground(QBrush(QColor("yellow")))
+        elif not logfile.getLogCleansingStatus(): 
+            cleansing.setText("FAILED")
+            cleansing.setBackground(QBrush(QColor("red")))
         else: 
-            cleansing.setIcon(errorIcon)
-        
+            cleansing.setText("PASSED")
+            cleansing.setBackground(QBrush(QColor("green")))
+                
         ingestion = QStandardItem()
-        if logfile.getIngestionStatus(): 
-            ingestion.setIcon(checkIcon)
+        if logfile.getIngestionStatus() == "null": 
+            ingestion.setText("IN-PROGRESS")
+            ingestion.setBackground(QBrush(QColor("yellow")))
+        elif not logfile.getIngestionStatus(): 
+            ingestion.setText("FAILED")
+            ingestion.setBackground(QBrush(QColor("red")))
         else: 
-            ingestion.setIcon(errorIcon)
+            ingestion.setText("PASSED")
+            ingestion.setBackground(QBrush(QColor("green")))
         
         self.model.appendRow([
             name, 
@@ -72,9 +85,56 @@ class ProcessingView(QWidget):
     def deleteFromTable(self): 
         pass
 
-    def updateTable(self): 
-        pass
-    
+    def updateRowStatus(self, logfile, process): 
+        red = QStandardItem("FAILED")
+        red.setBackground(QBrush(QColor("red")))
+
+        green = QStandardItem("PASSED")
+        green.setBackground(QBrush(QColor("green")))
+
+        yellow = QStandardItem("IN-PROGRESS")
+        yellow.setBackground(QBrush(QColor("yellow")))
+
+        item = None
+        row = -1 
+        col = -1
+        for index in range(self.model.rowCount()): 
+            qindex = self.model.index(index, 0)
+            name = self.model.data(qindex)
+
+            if name == logfile.getLogName(): 
+                row = index
+                if process == "validation": 
+                    col = 2
+                    if logfile.getValidationStatus() == "null": 
+                        item = yellow
+                    elif not logfile.getValidationStatus(): 
+                        item = red
+                    else: 
+                        item = green
+                elif process == "cleansing":
+                    col = 3
+                    if logfile.getLogCleansingStatus() == "null": 
+                        item = yellow
+                    elif not logfile.getLogCleansingStatus(): 
+                        item = red
+                    else: 
+                        item = green         
+                else: 
+                    col = 4
+                    if logfile.getIngestionStatus() == "null": 
+                        item = yellow 
+                    elif not logfile.getIngestionStatus(): 
+                        item = red
+                    else: 
+                        item = green
+
+                break
+
+        self.model.setItem(row, col, item)
+        self.tableView.setModel(self.model)
+                
+
     def update(self): 
-        self.logFileManager.addLogFile("file.py", "root/", "text")
+        # self.logFileManager.addLogFile("file.py", "root/", "text")
         self.parent.updateView(1)
