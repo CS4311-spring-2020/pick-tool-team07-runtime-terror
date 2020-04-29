@@ -101,11 +101,17 @@ class MainWindow(QMainWindow):
             self.analysisView.updateVectorList()
 
             # TODO Start all processing threads
-            thread = CleansingThread()
-            thread.logfileadd_callback.connect(self.processingView.addToTable)
-            thread.finished.connect(self.cleansingThreadDone)
-            thread.start()
-            self.threads.append(thread)
+            cleansing_thread = CleansingThread()
+            cleansing_thread.logfileadd_callback.connect(self.processingView.addToTable)
+            cleansing_thread.finished.connect(lambda: self.threads.remove(cleansing_thread))
+            cleansing_thread.start()
+            self.threads.append(cleansing_thread)
+
+            ingestion_thread = IngestionThread()
+            ingestion_thread.logentry_callback.connect(self.analysisView.addLogEntry)
+            ingestion_thread.finished.connect(lambda: self.threads.remove(ingestion_thread))
+            ingestion_thread.start()
+            self.threads.append(ingestion_thread)
         else: 
             # Just putting this here in case we need to handel the rejected case
             pass
@@ -121,12 +127,6 @@ class MainWindow(QMainWindow):
         dialog.setLayout(container) 
         doneBtn.clicked.connect(lambda: dialog.accept())
         dialog.exec()
-        
-    def cleansingThreadDone(self):
-        thread = IngestionThread()
-        thread.logentry_callback.connect(self.analysisView.addLogEntry)
-        thread.start()
-        self.threads.append(thread)
 
     def updateView(self, n): 
         self.windowStack.setCurrentIndex(n)
