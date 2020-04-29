@@ -13,8 +13,8 @@ class SplunkClient(object):
     # These attributes is based on the splunk admin account. 
     # Should probably store this information in a config file 
     # and also request this information from the user. 
-    USERNAME = "eirodriguez5"
-    PASSWORD = "RodH@ker2110"
+    USERNAME = "JoseG53"
+    PASSWORD = "Baxter@24865"
 
     # TODO: Need to verify if every "Assesment" will need a new index.
     INDEX = "test_app"
