@@ -68,7 +68,7 @@ class VectorConfigWidget(QWidget):
     def __init__(self, parent=None, eventManager=None):
         super(VectorConfigWidget, self).__init__(parent) 
         self.eventConfigManager = eventManager
-        self.vectorManager = VectorManager.get_instance()
+        self.vectorManager = VectorManager()
         self.initUI()
 
     def initUI(self): 

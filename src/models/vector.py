@@ -4,7 +4,6 @@ class Vector(object):
         self.description = desc
         self.nodes = []
 
-
     def setName(self, name): 
         self.name = name
 
@@ -23,7 +22,7 @@ class Vector(object):
         pass
 
     def getNodes(self):
-        return nodes 
+        return self.nodes 
 
     def __str__(self): 
         return 'Vector(name='+self.name+', desc='+self.description+')'
