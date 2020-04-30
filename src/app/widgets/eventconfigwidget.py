@@ -51,6 +51,7 @@ class EventConfigWidget(QWidget):
     #check if fields are emtpy and if any of them are return false
     def validateInputs(self):
         name = self.eventName.text()
+        description = self.eventDescription.text()
         if (not name or not description):
             return False
         else:
