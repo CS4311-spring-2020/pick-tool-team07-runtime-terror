@@ -108,6 +108,7 @@ class MainWindow(QMainWindow):
             self.threads.append(cleansing_thread)
 
             ingestion_thread = IngestionThread()
+            ingestion_thread.logfile_callback.connect(self.processingView.updateRowStatus)
             ingestion_thread.logentry_callback.connect(self.analysisView.addLogEntry)
             ingestion_thread.finished.connect(lambda: self.threads.remove(ingestion_thread))
             ingestion_thread.start()
