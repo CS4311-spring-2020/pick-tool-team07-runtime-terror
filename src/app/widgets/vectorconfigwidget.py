@@ -154,4 +154,4 @@ class VectorConfigWidget(QWidget):
         if( amount < 1):
             print(amount)
         else:
-            print(amount," ahha")
+            print(amount," there are vectors")
