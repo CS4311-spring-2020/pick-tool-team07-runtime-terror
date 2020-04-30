@@ -40,6 +40,9 @@ class EventConfigManager:
     def getEventConfig(self): 
         return self.eventconfig
 
+    def getEventTime(self):
+        return (self.eventconfig.getStart(), self.eventconfig.getEnd()) 
+
     def save(self): 
         config = ConfigManager()
         config.writeConfig(
