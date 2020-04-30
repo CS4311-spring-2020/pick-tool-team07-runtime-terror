@@ -148,10 +148,12 @@ class VectorConfigWidget(QWidget):
         QWidget().setLayout(self.layout())
         self.setLayout(widget.layout())
 
-    #not an ideal way 
-    def checkIfThereAreVectors(self, x):
+
+    def checkIfThereAreVectors(self):
         amount = len(self.vectorManager.getVectors())
         if( amount < 1):
-            print(amount)
+            return False
+            #print(amount)
         else:
-            print(amount," there are vectors")
+            return True
+            #print(amount," there are vectors")
