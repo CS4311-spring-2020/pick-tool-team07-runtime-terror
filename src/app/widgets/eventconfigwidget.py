@@ -47,3 +47,11 @@ class EventConfigWidget(QWidget):
             self.startTime.dateTime().toPyDateTime(), 
             self.endTime.dateTime().toPyDateTime()
         )
+
+    #check if fields are emtpy and if any of them are return false
+    def validateInputs(self):
+        name = self.eventName.text()
+        if (not name or not description):
+            return False
+        else:
+            return True
