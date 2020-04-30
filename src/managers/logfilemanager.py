@@ -3,26 +3,11 @@ from managers.base.dbmanager import DataBaseManager
 from models.logfile import LogFile
 
 class LogFileManager(DataBaseManager):
-    # __instance = None
-
-    # def __init__(self):
-    #     if LogFileManager.__instance == None:
-    #         LogFileManager.__instance = self
-    #         self.logFiles = []
-    #     else:
-    #         raise Exception("Trying to create another instance of a singelton class")
-
-    # @staticmethod
-    # def get_instance():
-    #     if LogFileManager.__instance == None:
-    #         LogFileManager()
-    #     return LogFileManager.__instance
 
     TABLE = "LogFiles"
     def __init__(self): 
         super().__init__()
         self.table = self.db[LogFileManager.TABLE]
-
 
     def addLogFile(
         self,
@@ -30,7 +15,6 @@ class LogFileManager(DataBaseManager):
         pathToFile,
         typeOfFile
     ):
-
         # Create File
         # TODO add the rest of the attributes that make up 
         # a log file

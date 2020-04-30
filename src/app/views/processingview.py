@@ -16,13 +16,10 @@ class ProcessingView(QWidget):
         self.parent = parent
         self.title = "Log Processing"
         self.logFileManager = LogFileManager()
-        # controller will tell view to update when a new LogFile is created
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle(self.title)
-        # self.setGeometry(self.top, self.left, self.width, self.height)
-        # self.resize(700, 500)
         self.tableView = QTableView()
         self.model = QStandardItemModel()
         self.model.setHorizontalHeaderLabels(['File Name', 'Source', 'Validation', 'Cleansing','Ingestion','Selection']) #set headers

@@ -35,8 +35,6 @@ class IngestionThread(QThread):
             if logFile is cleansing_done: 
                 break
 
-            print("Ingestion: Processing")
-            print(logFile.getIngestionStatus())
             if logFile.getIngestionStatus() == "True": 
                 continue
             
@@ -76,5 +74,3 @@ class IngestionThread(QThread):
                 self.fileManager.getLogFile(logFile.getLogName()), 
                 "ingestion"
             )
-        
-        print("Ingestion Done")
