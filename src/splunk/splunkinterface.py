@@ -3,19 +3,12 @@ import os
 import splunklib.client as client
 import splunklib.results as results 
 
+from utils.config import ConfigManager
+
 # Should we create an instance of the following class for each 
 # log file we upload? If so, will that be a problem where multiple instances
 # are making a connection to splunk simultaneously? 
 class SplunkClient(object): 
-    HOST = "localhost"
-    PORT = 8089
-
-    # These attributes is based on the splunk admin account. 
-    # Should probably store this information in a config file 
-    # and also request this information from the user. 
-    USERNAME = "JoseG53"
-    PASSWORD = "Baxter@24865"
-
     # TODO: Need to verify if every "Assesment" will need a new index.
     INDEX = "test_app"
 
@@ -23,12 +16,13 @@ class SplunkClient(object):
         self.connect()
 
     def connect(self): 
+        splunkconfig = ConfigManager().getConfig("SPLUNK")
         try: 
             self.service = client.connect(
-                host=self.HOST, 
-                port=self.PORT, 
-                username=self.USERNAME, 
-                password=self.PASSWORD
+                host=splunkconfig["Host"], 
+                port=splunkconfig["Port"], 
+                username=splunkconfig["Username"], 
+                password=splunkconfig["Password"]
             )
         except Exception as e: 
             # TODO: Handle this case
@@ -65,10 +59,9 @@ class SplunkClient(object):
         job = self.service.jobs.create(search, preview=True)
         while True: 
             while not job.is_ready(): 
-                print("Job is not ready")
+                continue
 
             if job["isDone"] == "1":
-                print("Job done")
                 break
          
         reader = results.ResultsReader(job.results())

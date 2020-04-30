@@ -107,7 +107,6 @@ class AnalysisView(QWidget):
             self.vectorWidget.addItem(item)
 
     def addLogEntry(self, logentry):
-        print(logentry)
         host = QStandardItem(logentry.getHost())
         timestamp = QStandardItem(logentry.getTimestamp())
         content = QStandardItem(logentry.getContent())
@@ -125,6 +124,5 @@ class AnalysisView(QWidget):
 
     def setVectorSelected(self, item): 
         selVecName = item.text()
-        print(selVecName)
         self.vectorManager.setCurrentVector(selVecName)
     
