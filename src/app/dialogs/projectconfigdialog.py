@@ -70,8 +70,10 @@ class ProjectConfigDialog(QDialog):
         msg.setText("stop")
         msg.setIcon(QMessageBox.Critical)
         msg.setStandardButtons(QMessageBox.Retry)
-        #self.eventConfig.validateEven()
-        if (self.dirConfig.validateInputs() or self.eventConfig.validateInputs()):
+        #this works, put it in if statement
+        #self.dirConfig.validateInputs() or self.eventConfig.validateInputs()
+        
+        if (self.vectorConfig.checkIfThereAreVectors(0)):
             self.parent.updateView(2)
             self.accept()
         else:

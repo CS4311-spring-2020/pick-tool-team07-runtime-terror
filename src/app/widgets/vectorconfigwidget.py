@@ -110,6 +110,7 @@ class VectorConfigWidget(QWidget):
 
     def add(self): 
         addWidget = AddWidget(parent=self, vectormanager=self.vectorManager)
+        #self.checkIfThereAreVectors(1)
         self.setNewLayout(addWidget)
 
     def edit(self): 
@@ -125,6 +126,7 @@ class VectorConfigWidget(QWidget):
                 
     def delete(self): 
         selected = self.vectorsTbl.selectionModel()
+        #self.checkIfThereAreVectors(-1)
         if selected.hasSelection(): 
             indexes = selected.selectedIndexes()
             name = indexes[0].data()
@@ -145,3 +147,11 @@ class VectorConfigWidget(QWidget):
     def setNewLayout(self, widget): 
         QWidget().setLayout(self.layout())
         self.setLayout(widget.layout())
+
+    #not an ideal way 
+    def checkIfThereAreVectors(self, x):
+        amount = len(self.vectorManager.getVectors())
+        if( amount < 1):
+            print(amount)
+        else:
+            print(amount," ahha")
