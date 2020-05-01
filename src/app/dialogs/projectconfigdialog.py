@@ -62,9 +62,22 @@ class ProjectConfigDialog(QDialog):
 
     def start(self):
         # TODO: Verify that all configuration is correctly setup
-        self.parent.updateView(1)
-        self.accept()
-        # self.done(0)
+
+        msg = QMessageBox()
+        msg.setWindowTitle("warning")
+        msg.setText("Please fill in missing fields")
+        msg.setIcon(QMessageBox.Critical)
+        msg.setStandardButtons(QMessageBox.Retry)
+
+        if (self.vectorConfig.checkIfThereAreVectors() and self.dirConfig.validateInputs() and self.eventConfig.validateInputs()):
+            self.parent.updateView(2)
+            self.accept()
+        else:
+            answer = msg.exec()
+            if answer == QMessageBox.Retry:
+                msg.close()
+        
+
 
     def cancel(self): 
         self.reject()

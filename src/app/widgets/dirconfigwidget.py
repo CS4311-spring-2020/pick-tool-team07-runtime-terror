@@ -113,3 +113,13 @@ class DirConfigWidget(QWidget):
         self.redFolderPath.setText(path)
         self.blueFolderPath.setText(path)
         self.whiteFolderPath.setText(path)
+
+    def validateInputs(self):
+        roots = self.rootDirPath.text()
+        red = self.redFolderPath.text()
+        blue = self.blueFolderPath.text()
+        white = self.whiteFolderPath.text()
+        if (not roots or not red or not blue or not white):
+            return False
+        else:
+            return True

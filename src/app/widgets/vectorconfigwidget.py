@@ -33,12 +33,16 @@ class AddWidget(QWidget):
         submit = QPushButton("Submit")
         submit.clicked.connect(lambda: self.add_submit(name, desc, init_name=init_name, init_desc=init_desc))
 
+        bckbtn = QPushButton("Go Back")
+        bckbtn.clicked.connect(lambda: self.goBack())
+
         container = QVBoxLayout()
         container.addWidget(namelbl)
         container.addWidget(name)
         container.addWidget(desclbl)
         container.addWidget(desc)
         container.addWidget(submit)
+        container.addWidget(bckbtn)
 
         self.setLayout(container)
 
@@ -54,6 +58,9 @@ class AddWidget(QWidget):
             if self.vectormanager.vectorExists(init_name):
                 self.vectormanager.updateVector(init_name, vec_name, vec_desc)
 
+        self.parent.initUI()
+
+    def goBack(self):
         self.parent.initUI()
 
 
@@ -138,3 +145,12 @@ class VectorConfigWidget(QWidget):
     def setNewLayout(self, widget): 
         QWidget().setLayout(self.layout())
         self.setLayout(widget.layout())
+
+
+    def checkIfThereAreVectors(self):
+        amount = len(self.vectorManager.getVectors())
+        if( amount == 0):
+            return False
+        else:
+            return True
+        
