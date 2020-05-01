@@ -63,17 +63,13 @@ class ProjectConfigDialog(QDialog):
     def start(self):
         # TODO: Verify that all configuration is correctly setup
 
-        #function should return a boolean
-        #do for the rest of the widgets
         msg = QMessageBox()
         msg.setWindowTitle("warning")
         msg.setText("Please fill in missing fields")
         msg.setIcon(QMessageBox.Critical)
         msg.setStandardButtons(QMessageBox.Retry)
-        #this works, put it in if statement
-        #self.dirConfig.validateInputs() or self.eventConfig.validateInputs()
-        
-        if (self.vectorConfig.checkIfThereAreVectors() or self.dirConfig.validateInputs() or self.eventConfig.validateInputs()):
+
+        if (self.vectorConfig.checkIfThereAreVectors() and self.dirConfig.validateInputs() and self.eventConfig.validateInputs()):
             self.parent.updateView(2)
             self.accept()
         else:
@@ -81,10 +77,7 @@ class ProjectConfigDialog(QDialog):
             if answer == QMessageBox.Retry:
                 msg.close()
         
-        #self.done(0)
-        self.parent.updateView(1)
-        self.accept()
-        # self.done(0)
+
 
     def cancel(self): 
         self.reject()
