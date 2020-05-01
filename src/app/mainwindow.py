@@ -2,7 +2,7 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QThread, pyqtSignal  
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMainWindow, QAction, QStackedLayout, QBoxLayout, QWidget,\
-                            QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QToolBar, QToolButton
+                            QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QToolBar, QToolButton, QDialog
 
 
 
