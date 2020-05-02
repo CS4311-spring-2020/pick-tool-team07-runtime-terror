@@ -47,3 +47,11 @@ class EventConfigWidget(QWidget):
             self.startTime.dateTime().toPyDateTime(), 
             self.endTime.dateTime().toPyDateTime()
         )
+
+    def validateInputs(self):
+        name = self.eventName.text()
+        description = self.eventDescription.text()
+        if (not name or not description):
+            return False
+        else:
+            return True

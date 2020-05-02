@@ -9,6 +9,6 @@ class Node(object):
         self.eventType = None 
         self.icon = None 
         self.source = None 
-        self.visiable = None # Spell check lol
+        self.visible = None 
 
     #TODO: Add getters and setters for each attribute

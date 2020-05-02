@@ -1,7 +1,7 @@
 from PyQt5 import QtCore 
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMainWindow, QAction, QStackedLayout, QBoxLayout, QWidget,\
-                            QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QToolBar, QToolButton
+                            QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QToolBar, QToolButton, QDialog
 
 from app.views.analysisview import AnalysisView
 from app.views.processingview import ProcessingView
