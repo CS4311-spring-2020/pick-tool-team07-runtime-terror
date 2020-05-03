@@ -9,6 +9,7 @@ from app.views.actionReportView import ActionReportView
 from app.dialogs.projectconfigdialog import ProjectConfigDialog
 #import dialog from edit vector configuration for edit Vector Process
 from app.widgets.vectorconfigwidget import VectorConfigWidget
+from app.widgets.eventconfigwidget import EventConfigWidget
 
 from processes.cleansing import CleansingThread
 from processes.ingestion import IngestionThread
@@ -34,12 +35,6 @@ class MainWindow(QMainWindow):
         self.processingView = ProcessingView(self)
         self.actionreportview = ActionReportView(self)
 
-        #Sets home pic        
-        # pic_label = QLabel()
-        # home_page = QPixmap("app/images/PICK_home.png")
-        # pic_label.setPixmap(home_page.scaled(self.width(),self.height(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.FastTransformation))
-
-        # self.windowStack.addWidget(pic_label)
         self.windowStack.addWidget(self.analysisView)
         self.windowStack.addWidget(self.processingView)
         self.windowStack.addWidget(self.actionreportview)
@@ -77,7 +72,7 @@ class MainWindow(QMainWindow):
         self.newProject.triggered.connect(self.newProjectProcess)
 
         self.editConfig = QAction("Edit Configuration", self)
-        self.editConfig.triggered.connect(lambda: self.updateView(1))
+        self.editConfig.triggered.connect(self.editConfigDialog)
 
         self.editVectorConfig = QAction("Edit Vector Configuration", self)
         self.editVectorConfig.triggered.connect(self.editVecProcess)
@@ -90,7 +85,6 @@ class MainWindow(QMainWindow):
         self.editmenu.addAction(self.editVectorConfig)
     
     def newProjectProcess(self):
-        from PyQt5.QtWidgets import QDialog
         newProjectDialog = ProjectConfigDialog(self)
         newProjectDialog.exec()
 
@@ -118,7 +112,6 @@ class MainWindow(QMainWindow):
             pass
 
     def editVecProcess(self):
-        from PyQt5.QtWidgets import QDialog
         dialog = QDialog(self)
         container = QHBoxLayout()
         newVectorEditDialog = VectorConfigWidget(self)
@@ -128,6 +121,16 @@ class MainWindow(QMainWindow):
         dialog.setLayout(container) 
         doneBtn.clicked.connect(lambda: dialog.accept())
         dialog.exec()
+
+    def editConfigDialog(self): 
+        dialog = QDialog(self)
+        config = EventConfigWidget(parent=dialog, eventManager=EventConfigManager.get_instance())
+
+        container = QVBoxLayout()
+        container.addWidget(config)
+        dialog.setLayout(container)
+        dialog.exec()
+
 
     def updateView(self, n): 
         self.windowStack.setCurrentIndex(n)
