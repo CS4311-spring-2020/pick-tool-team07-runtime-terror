@@ -3,8 +3,9 @@ from PyQt5.QtWidgets import QDialog, QFileDialog, QWidget, QListWidget, QStacked
                             QHBoxLayout, QLabel, QPushButton, QRadioButton, QLineEdit, QDateTimeEdit, QSpacerItem, QSizePolicy
 
 class DirConfigWidget(QWidget):
-    def __init__(self, parent=None, eventManager=None):  
+    def __init__(self, hide=False, parent=None, eventManager=None):  
         super(DirConfigWidget, self).__init__(parent)
+        self.hide = hide
         self.eventConfigManager = eventManager
         self.initUI()
 
@@ -64,6 +65,8 @@ class DirConfigWidget(QWidget):
 
         saveBtn = QPushButton("Save")
         saveBtn.clicked.connect(self.saveConfig)
+        if self.hide == True: 
+            saveBtn.hide()
 
         dirViewContainer = QVBoxLayout()
         dirViewContainer.addLayout(viewLabelCon)

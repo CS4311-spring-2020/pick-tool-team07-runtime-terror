@@ -2,8 +2,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout,QHBoxLayout, QLabel, QPushButton, QLineEdit, QDateTimeEdit
 
 class EventConfigWidget(QWidget):
-    def __init__(self, parent=None, eventManager=None): 
+    def __init__(self, hide=False, parent=None, eventManager=None): 
         super(EventConfigWidget, self).__init__(parent) 
+        self.hide = hide
         self.eventConfigManager = eventManager
         self.initUI()
 
@@ -25,6 +26,8 @@ class EventConfigWidget(QWidget):
 
         saveBtn = QPushButton("Save")
         saveBtn.clicked.connect(self.save)
+        if self.hide == True: 
+            saveBtn.hide()
 
         eventConfigContainer = QVBoxLayout()
         eventConfigContainer.addWidget(self.viewLabel)
@@ -41,6 +44,11 @@ class EventConfigWidget(QWidget):
         self.setLayout(eventConfigContainer)
 
     def save(self):
+        print(self.parent())
+        print(self.hide)
+        if self.parent() and self.hide == False: 
+            self.parent().accept()
+            
         self.eventConfigManager.setEventAttributes(
             self.eventName.text(), 
             self.eventDescription.text(), 

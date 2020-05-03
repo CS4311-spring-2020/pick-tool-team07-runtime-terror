@@ -2,8 +2,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QTableView, QVBoxLayout,QHBoxLayout, QLabel, QPushButton, QRadioButton, QLineEdit
 
 class TeamConfigWidget(QWidget):
-    def __init__(self, parent=None, eventManager=None):
+    def __init__(self, hide=False, parent=None, eventManager=None):
         super(TeamConfigWidget, self).__init__(parent)  
+        self.hide = hide
         self.eventConfigManager = eventManager
         self.initUI()
 
@@ -31,6 +32,8 @@ class TeamConfigWidget(QWidget):
         self.connectBtn = QPushButton()
         self.connectBtn.setText("Connect")
         self.connectBtn.clicked.connect(self.connect)
+        if self.hide == True: 
+            self.connectBtn.hide()
 
 
         teamViewContainer = QVBoxLayout()
