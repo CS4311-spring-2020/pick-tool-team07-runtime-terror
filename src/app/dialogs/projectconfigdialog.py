@@ -2,7 +2,7 @@ import sys
 sys.path.append("../..")
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayout, QHBoxLayout, QPushButton, QSpacerItem, QSizePolicy
+from PyQt5.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayout, QHBoxLayout, QPushButton, QSpacerItem, QSizePolicy, QMessageBox
 
 from managers.eventconfigmanager import EventConfigManager
 
@@ -20,9 +20,9 @@ class ProjectConfigDialog(QDialog):
 
     def initUI(self): 
         self.resize(850,600)
-        self.teamConfig = TeamConfigWidget(parent=self, eventManager=self.eventConfigManager)
-        self.dirConfig = DirConfigWidget(parent=self, eventManager=self.eventConfigManager)
-        self.eventConfig = EventConfigWidget(parent=self, eventManager=self.eventConfigManager)
+        self.teamConfig = TeamConfigWidget(parent=self, eventManager=self.eventConfigManager, hide=True)
+        self.dirConfig = DirConfigWidget(parent=self, eventManager=self.eventConfigManager, hide=True)
+        self.eventConfig = EventConfigWidget(parent=self, eventManager=self.eventConfigManager, hide=True)
         self.vectorConfig = VectorConfigWidget(parent=self, eventManager=self.eventConfigManager)
         
         self.stack = QStackedWidget(self)
@@ -62,9 +62,25 @@ class ProjectConfigDialog(QDialog):
 
     def start(self):
         # TODO: Verify that all configuration is correctly setup
-        self.parent.updateView(2)
-        self.accept()
-        # self.done(0)
+
+        msg = QMessageBox()
+        msg.setWindowTitle("warning")
+        msg.setText("Please fill in missing fields")
+        msg.setIcon(QMessageBox.Critical)
+        msg.setStandardButtons(QMessageBox.Retry)
+
+        if (self.vectorConfig.checkIfThereAreVectors() and self.dirConfig.validateInputs() and self.eventConfig.validateInputs()):
+            self.dirConfig.saveConfig()
+            self.eventConfig.save()
+            self.teamConfig.connect()
+            self.parent.updateView(1)
+            self.accept()
+        else:
+            answer = msg.exec()
+            if answer == QMessageBox.Retry:
+                msg.close()
+        
+
 
     def cancel(self): 
         self.reject()

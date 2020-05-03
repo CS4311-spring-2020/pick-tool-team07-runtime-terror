@@ -76,8 +76,5 @@ class EventConfig(object):
     def getLeadIp(self):
         return self.leadIp
 
-    def getConnections(self, conn):
-        self.connections = conn     
-    
-
-    
+    def getConnections(self):
+        return self.connections

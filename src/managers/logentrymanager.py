@@ -35,6 +35,5 @@ class LogEntryManager:
     def getEntryByContent(self, content):   
         for entry in self.logEntries: 
             if content == entry.getContent(): 
-                print(entry)
                 return entry
         return None

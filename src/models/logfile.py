@@ -1,12 +1,21 @@
 class LogFile(object):
-    def __init__(self, logFileName, pathToFile, typeOfFile):
-        self.logFileName = logFileName
-        self.cleansingStatus = False
-        self.validationStatus = False
-        self.ingestionStatus = False
-        self.acknowledgementStatus = False
-        self.pathToFile = pathToFile
-        self.typeOfFile = typeOfFile
+    def __init__(
+        self, 
+        name,
+        path,
+        type, 
+        cleansing, 
+        validation, 
+        ingestion, 
+        ack
+    ):
+        self.logFileName = name
+        self.cleansingStatus = cleansing
+        self.validationStatus = validation
+        self.ingestionStatus = ingestion
+        self.acknowledgementStatus = ack
+        self.pathToFile = path
+        self.typeOfFile = type
 
     def setLogName(self, logFileName):
         self.logFileName = logFileName

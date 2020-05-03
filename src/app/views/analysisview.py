@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QWidget, QDialog,QFrame, QGridLayout, QHBoxLayout, Q
 class AnalysisView(QWidget): 
     def __init__(self, parent=None): 
         super(QWidget, self).__init__(parent)
-        self.vectorManager = VectorManager.get_instance()
+        self.vectorManager = VectorManager()
         self.initUI()
 
     def initUI(self): 
@@ -107,7 +107,6 @@ class AnalysisView(QWidget):
             self.vectorWidget.addItem(item)
 
     def addLogEntry(self, logentry):
-        print(logentry)
         host = QStandardItem(logentry.getHost())
         timestamp = QStandardItem(logentry.getTimestamp())
         content = QStandardItem(logentry.getContent())
@@ -125,6 +124,5 @@ class AnalysisView(QWidget):
 
     def setVectorSelected(self, item): 
         selVecName = item.text()
-        print(selVecName)
         self.vectorManager.setCurrentVector(selVecName)
     
