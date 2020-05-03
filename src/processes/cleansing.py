@@ -1,3 +1,9 @@
+import os
+
+from PIL import Image
+import pytesseract
+import filetype
+
 from PyQt5.QtCore import QThread, pyqtSignal 
 
 from managers.logfilemanager import LogFileManager
@@ -18,24 +24,35 @@ class CleansingThread(QThread):
 
     def run(self):
         self.remove_empty()
-        self.createLogFiles()
+        self.processFiles()
         ingestion_queue.put(cleansing_done)
+    
 
-    def createLogFiles(self):
-        import os
+    def processFiles(self): 
         for dirName, subdirList, filelist in os.walk(self.eventConfig.getRootDir(), topdown=False):
             for fname in filelist:
-                self.logfilemanager.addLogFile(fname, dirName + "/" + fname, os.path.splitext(fname))
-                logfile = self.logfilemanager.getLogFile(fname)
-                ingestion_queue.put(logfile)
+                f = fname
+                if filetype.image_match(dirName+'/'+fname): 
+                    output = pytesseract.image_to_string(Image.open(dirName+'/'+fname))
+                    with open(dirName+'/'+fname+'.txt', 'w') as newF: 
+                        newF.write(output)
+                    f = fname+'.txt'
+                #TODO handle audio files
+                self.createLogFile(dirName, f)
+                
+    def createLogFile(self, dirName, fname):
+        self.logfilemanager.addLogFile(fname, dirName + "/" + fname, os.path.splitext(fname))
+        logfile = self.logfilemanager.getLogFile(fname)
+        ingestion_queue.put(logfile)
 
-                self.logfilemanager.updateCleanseStatus(fname, True)
-                self.logfileadd_callback.emit(self.logfilemanager.getLogFile(fname))
+        self.logfilemanager.updateCleanseStatus(fname, True)
+        self.logfileadd_callback.emit(self.logfilemanager.getLogFile(fname))
 
     def remove_empty(self):
-        import os
         for dirName, subdirList, filelist in os.walk(self.eventConfig.getRootDir(), topdown=False):
             for fname in filelist:
+                if filetype.image_match(dirName+'/'+fname): 
+                    continue
                 if (fname != '.DS_Store'):
                     with open(dirName + "/" + fname) as in_file, open((dirName + "/" + fname), 'r+') as out_file:
                         out_file.writelines(line for line in in_file if line.strip())

@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 from PyQt5.QtCore import Qt, QDate, QDateTime
+=======
+from PyQt5.QtCore import Qt, QDateTime
+>>>>>>> 71cff3c8de37dd0a37d5614f9e478adb2d7ae1f0
 from PyQt5.QtWidgets import QWidget, QVBoxLayout,QHBoxLayout, QLabel, QPushButton, QLineEdit, QDateTimeEdit
 
 class EventConfigWidget(QWidget):
-    def __init__(self, parent=None, eventManager=None): 
+    def __init__(self, hide=False, parent=None, eventManager=None): 
         super(EventConfigWidget, self).__init__(parent) 
+        self.hide = hide
         self.eventConfigManager = eventManager
         self.initUI()
 
@@ -18,15 +23,17 @@ class EventConfigWidget(QWidget):
         self.eventDescription = QLineEdit()
 
         self.startTimeLbl = QLabel("Start Date and Time")
-        self.startTime = QDateTimeEdit()
+        self.startTime = QDateTimeEdit(QDateTime.currentDateTime())
         self.startTime.setDisplayFormat("yyyy-MM-ddT-HH:mm:ssZ")
 
         self.endTimeLbl = QLabel("End Date and Time")
-        self.endTime = QDateTimeEdit()
+        self.endTime = QDateTimeEdit(QDateTime.currentDateTime())
         self.endTime.setDisplayFormat("yyyy-MM-ddT-HH:mm:ssZ")
 
         saveBtn = QPushButton("Save")
         saveBtn.clicked.connect(self.save)
+        if self.hide == True: 
+            saveBtn.hide()
 
         eventConfigContainer = QVBoxLayout()
         eventConfigContainer.addWidget(self.viewLabel)
@@ -43,11 +50,16 @@ class EventConfigWidget(QWidget):
         self.setLayout(eventConfigContainer)
 
     def save(self):
+        print(self.parent())
+        print(self.hide)
+        if self.parent() and self.hide == False: 
+            self.parent().accept()
+            
         self.eventConfigManager.setEventAttributes(
             self.eventName.text(), 
             self.eventDescription.text(), 
-            self.startTime.dateTime().toUTC(), 
-            self.endTime.dateTime().toPyDateTime()
+            self.startTime.dateTime().toUTC(),
+            self.endTime.dateTime().toUTC()
         )
         print(self.startTime.dateTime().toUTC().toString())
 
