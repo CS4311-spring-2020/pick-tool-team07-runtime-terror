@@ -55,3 +55,17 @@ class EventConfigWidget(QWidget):
             return False
         else:
             return True
+
+    def validateTimeEqual(self):
+        eq = self.startTime.dateTime().__ge__(self.endTime.dateTime())
+        if(eq and not self.validateTimeLater()):
+            return True
+        else: 
+            return False
+
+    def validateTimeLater(self):
+        sGreat = self.startTime.dateTime().__gt__(self.endTime.dateTime())
+        if(sGreat):
+            return True
+        else: 
+            return False
