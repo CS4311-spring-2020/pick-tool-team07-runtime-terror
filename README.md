@@ -18,6 +18,7 @@ python3 -m pip install pymongo
 
 - OCR: Pytesseract: It was never specefied which OCR software to use in SRS and it was also not specified which we couldnt use.
 ```
+python3 -m pip install filetype
 python3 -m pip install pytesseract
 
 You have to install the OCR engine, so the following will work on linux machines: 
