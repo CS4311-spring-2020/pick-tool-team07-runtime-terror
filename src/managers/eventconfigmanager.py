@@ -50,8 +50,8 @@ class EventConfigManager:
             {
                 "Name": self.eventconfig.getName(), 
                 "Description": self.eventconfig.getDesc(), 
-                "StartTime": self.eventconfig.getStart().strftime("%m/%d/%Y, %H:%M:%S"),
-                "EndTime": self.eventconfig.getEnd().strftime("%m/%d/%Y, %H:%M:%S"), 
+                "StartTime": self.eventconfig.getStart().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "EndTime": self.eventconfig.getEnd().strftime("%Y-%m-%dT%H:%M:%SZ"),
                 "Lead": self.eventconfig.getLead(),
                 "LeadIp": self.eventconfig.getLeadIp(), 
                 "Connections": self.eventconfig.getConnections(),
