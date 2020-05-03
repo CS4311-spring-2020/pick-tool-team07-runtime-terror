@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QDate, QDateTime
 from PyQt5.QtWidgets import QWidget, QVBoxLayout,QHBoxLayout, QLabel, QPushButton, QLineEdit, QDateTimeEdit
 
 class EventConfigWidget(QWidget):
@@ -19,9 +19,11 @@ class EventConfigWidget(QWidget):
 
         self.startTimeLbl = QLabel("Start Date and Time")
         self.startTime = QDateTimeEdit()
+        self.startTime.setDisplayFormat("yyyy-MM-ddT-HH:mm:ssZ")
 
         self.endTimeLbl = QLabel("End Date and Time")
         self.endTime = QDateTimeEdit()
+        self.endTime.setDisplayFormat("yyyy-MM-ddT-HH:mm:ssZ")
 
         saveBtn = QPushButton("Save")
         saveBtn.clicked.connect(self.save)
@@ -44,9 +46,11 @@ class EventConfigWidget(QWidget):
         self.eventConfigManager.setEventAttributes(
             self.eventName.text(), 
             self.eventDescription.text(), 
-            self.startTime.dateTime().toPyDateTime(), 
+            self.startTime.dateTime().toUTC(), 
             self.endTime.dateTime().toPyDateTime()
         )
+        print(self.startTime.dateTime().toUTC().toString())
+
 
     def validateInputs(self):
         name = self.eventName.text()
