@@ -61,7 +61,6 @@ class ProjectConfigDialog(QDialog):
         self.setLayout(mainContainer)
 
     def start(self):
-        # TODO: Verify that all configuration is correctly setup
 
         msg = QMessageBox()
         msg.setWindowTitle("warning")
@@ -69,13 +68,41 @@ class ProjectConfigDialog(QDialog):
         msg.setIcon(QMessageBox.Critical)
         msg.setStandardButtons(QMessageBox.Retry)
 
-        if (self.vectorConfig.checkIfThereAreVectors() and self.dirConfig.validateInputs() and self.eventConfig.validateInputs()):
-            self.dirConfig.saveConfig()
-            self.eventConfig.save()
-            self.teamConfig.connect()
+        vec = self.vectorConfig.checkIfThereAreVectors() 
+        dirc = self.dirConfig.validateInputs()
+        eventc = self.eventConfig.validateInputs()
+        equalTime = self.eventConfig.validateTimeEqual()
+        startLater = self.eventConfig.validateTimeLater()
+        vecmsg = "Must have at least one vector"
+        dircmsg = "Directory Configuration"
+        eventmsg = "Event Configuration"
+        timeEqual = "Start and End time can not be equal"
+        timeStartLater = "End time can not be before start time"
+        
+        
+        l = [""]
+
+        if (vec and dirc and eventc and (not equalTime or not startLater)):
             self.parent.updateView(1)
             self.accept()
         else:
+            if not vec:
+                l.append(vecmsg)
+                l.append("\n")
+            if not dirc:
+                l.append(dircmsg)
+                l.append("\n")
+            if not eventc:
+                l.append(eventmsg)
+                l.append("\n")
+            if (equalTime):
+                l.append("-"+timeEqual)
+                l.append("\n")
+            if (startLater):
+                l.append("-"+timeStartLater)
+                l.append("\n")
+            #list of msgs together and join them into single string 
+            msg.setInformativeText(''.join(l))
             answer = msg.exec()
             if answer == QMessageBox.Retry:
                 msg.close()
