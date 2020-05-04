@@ -83,6 +83,9 @@ class ProjectConfigDialog(QDialog):
         l = [""]
 
         if (vec and dirc and eventc and (not equalTime or not startLater)):
+            self.teamConfig.connect()
+            self.dirConfig.saveConfig()
+            self.eventConfig.save()
             self.parent.updateView(1)
             self.accept()
         else:
