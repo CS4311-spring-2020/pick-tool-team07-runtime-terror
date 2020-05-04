@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+from PyQt5.QtCore import Qt, QDate, QDateTime
+=======
 from PyQt5.QtCore import Qt, QDateTime
+>>>>>>> 71cff3c8de37dd0a37d5614f9e478adb2d7ae1f0
 from PyQt5.QtWidgets import QWidget, QVBoxLayout,QHBoxLayout, QLabel, QPushButton, QLineEdit, QDateTimeEdit
 
 class EventConfigWidget(QWidget):
@@ -57,6 +61,8 @@ class EventConfigWidget(QWidget):
             self.startTime.dateTime().toUTC(),
             self.endTime.dateTime().toUTC()
         )
+        print(self.startTime.dateTime().toUTC().toString())
+
 
     def validateInputs(self):
         name = self.eventName.text()
