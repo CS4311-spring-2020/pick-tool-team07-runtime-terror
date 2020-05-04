@@ -20,9 +20,9 @@ class ProjectConfigDialog(QDialog):
 
     def initUI(self): 
         self.resize(850,600)
-        self.teamConfig = TeamConfigWidget(parent=self, eventManager=self.eventConfigManager)
-        self.dirConfig = DirConfigWidget(parent=self, eventManager=self.eventConfigManager)
-        self.eventConfig = EventConfigWidget(parent=self, eventManager=self.eventConfigManager)
+        self.teamConfig = TeamConfigWidget(parent=self, eventManager=self.eventConfigManager, hide=True)
+        self.dirConfig = DirConfigWidget(parent=self, eventManager=self.eventConfigManager, hide=True)
+        self.eventConfig = EventConfigWidget(parent=self, eventManager=self.eventConfigManager, hide=True)
         self.vectorConfig = VectorConfigWidget(parent=self, eventManager=self.eventConfigManager)
         
         self.stack = QStackedWidget(self)
@@ -83,7 +83,7 @@ class ProjectConfigDialog(QDialog):
         l = [""]
 
         if (vec and dirc and eventc and (not equalTime or not startLater)):
-            self.parent.updateView(2)
+            self.parent.updateView(1)
             self.accept()
         else:
             if not vec:
