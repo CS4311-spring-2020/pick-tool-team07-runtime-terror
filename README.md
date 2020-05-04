@@ -25,6 +25,17 @@ You have to install the OCR engine, so the following will work on linux machines
 sudo apt install tesseract-ocr
 sudo apt install libtesseract-dev
 ```
+
+- ffmpeg: Converts video to audio and audio to wav
+```
+sudo apt update
+sudo apt install ffmpeg
+```
+
+- Speech Recognition
+```
+python3 -m pip install SpeechRecognition
+```
 ### Running PICK system
 Shell script was provided, this shell script is only meant to be run in Linux environments
 it also does not check if the necessary services are installed in the machine, so need to 

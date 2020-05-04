@@ -54,8 +54,8 @@ class EventConfigWidget(QWidget):
         self.eventConfigManager.setEventAttributes(
             self.eventName.text(), 
             self.eventDescription.text(), 
-            self.startTime.dateTime().toUTC(),
-            self.endTime.dateTime().toUTC()
+            self.startTime.dateTime().toPyDateTime(), #.toUTC(),
+            self.endTime.dateTime().toPyDateTime(), #.toUTC()
         )
 
     def validateInputs(self):
