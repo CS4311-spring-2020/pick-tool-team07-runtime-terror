@@ -1,4 +1,5 @@
 from managers.base.dbmanager import DataBaseManager
+from managers.nodemanager import NodeManager
 from models.vector import Vector
 
 class VectorManager(DataBaseManager): 
@@ -6,13 +7,13 @@ class VectorManager(DataBaseManager):
     def __init__(self):
         super().__init__()
         self.table = self.db[VectorManager.TABLE]
-
+        self.nodeManager = NodeManager()
 
     def addVector(self, name, desc): 
         v = {
             "name": name, 
             "desc": desc, 
-            "nodes": "null"
+            "nodes": []
         }# Vector(name, desc)
         self.add(v)
 
@@ -24,7 +25,7 @@ class VectorManager(DataBaseManager):
 
     def getVectors(self): 
         vectors = [
-            Vector(vector["name"], vector["desc"]) for vector in self.get(None)
+            Vector(vector["name"], vector["desc"], vector["nodes"]) for vector in self.get(None)
         ]
         return vectors
 
@@ -35,10 +36,17 @@ class VectorManager(DataBaseManager):
         for result in results: 
             vector = Vector(
                 result["name"], 
-                result["desc"]
+                result["desc"], 
+                result["nodes"]
             )
             break
         return vector
+
+    def associateLogEntry(self, logentry, vector):
+        self.nodeManager.addNode(logentry)
+        node = self.nodeManager.getNodeByLogRef(logentry.getNumber())
+
+        self.table.update({"name": vector.getName()}, {"$push": {"nodes":node.getId()}})
 
     def updateVector(self, vector_name, name, desc): 
         query = {"name": vector_name}

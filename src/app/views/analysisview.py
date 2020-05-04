@@ -1,21 +1,24 @@
 import sys
 sys.path.append("../..")
 from managers.vectormanager import VectorManager
-from managers.logentrymanager import LogEntry
+from managers.nodemanager import NodeManager
+from managers.logentrymanager import LogEntryManager
 
 from app.views.graph.graphwidget import GraphWidget
 
 from PyQt5 import QtGui, QtCore, QtWidgets
-from PyQt5.QtCore import Qt, QSize, QEvent
+from PyQt5.QtCore import Qt, QSize, QEvent, pyqtSlot
 from PyQt5.QtGui import QIcon, QPixmap, QStandardItemModel, QStandardItem, QFontMetrics, QPalette
 from PyQt5.QtWidgets import QWidget, QDialog,QFrame, QGridLayout, QHBoxLayout, QVBoxLayout, QTableView,QTableWidget, QTabWidget,\
                             QListWidget, QListWidgetItem, QLineEdit, QComboBox, QSpacerItem, QSizePolicy, QAction, QAbstractItemView,\
-                            QHeaderView, QListWidget, QStyledItemDelegate, qApp
+                            QHeaderView, QListWidget, QStyledItemDelegate, qApp, QLabel
 
 class AnalysisView(QWidget): 
     def __init__(self, parent=None): 
         super(QWidget, self).__init__(parent)
         self.vectorManager = VectorManager()
+        self.nodeManager = NodeManager()
+        self.logentryManager = LogEntryManager.get_instance()
         self.initUI()
 
     def initUI(self): 
@@ -27,6 +30,7 @@ class AnalysisView(QWidget):
         self.logEntriesTbl = QTableView()
         self.logEntryModel = QStandardItemModel()
         self.logEntryModel.setHorizontalHeaderLabels(['Host', 'Timestamp', 'Content', 'Source', 'Source Type', 'Associated Vectors'])
+        
         self.logEntriesTbl.setModel(self.logEntryModel)
         self.logEntriesTbl.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
@@ -43,7 +47,6 @@ class AnalysisView(QWidget):
         vectorLbl.setFlags(Qt.NoItemFlags)
 
         self.workspace = QHBoxLayout()
-        #self.workspace.addWidget(self.vectorWidget, 10)
         self.workspace.addWidget(self.tabWidget,90)
 
         # Filtering and search
@@ -65,23 +68,41 @@ class AnalysisView(QWidget):
 
     def setupVectorTab(self): 
         self.graph = GraphWidget()
+
         self.nodes = QTableView()
+        nodeModel = QStandardItemModel()
+        nodeModel.setHorizontalHeaderLabels([
+            "Name", 
+            "Timestamp", 
+            "Description", 
+            "Log Entry Refrence", 
+            "Log Creator", 
+            "Icon", 
+            "Source", 
+            "Visible"
+        ])
+        self.nodes.setModel(nodeModel)
+        # self.nodes.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         self.vectorViews = QHBoxLayout()
         self.vectorViews.addWidget(self.nodes, 30)
         self.vectorViews.addWidget(self.graph, 70)
 
         hSpacer = QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Fixed)
-        self.orientationCb = QComboBox()
-        self.unitsCb = QComboBox()
-        self.interval = QLineEdit()
+        vectorsLable = QLabel("Vectors")
+        self.vectorsCB = QComboBox()
+        self.vectorsCB.currentIndexChanged.connect(self.vectorHandle)
+        self.vectorAdded()
+        # self.unitsCb = QComboBox()
+        # self.interval = QLineEdit()
 
         # Graph controls such as orientation, interval units, interval
         self.graphContols = QHBoxLayout()
         self.graphContols.addItem(hSpacer)
-        self.graphContols.addWidget(self.orientationCb)
-        self.graphContols.addWidget(self.unitsCb)
-        self.graphContols.addWidget(self.interval)
+        self.graphContols.addWidget(vectorsLable)
+        self.graphContols.addWidget(self.vectorsCB)
+        # self.graphContols.addWidget(self.unitsCb)
+        # self.graphContols.addWidget(self.interval)
 
         self.container = QVBoxLayout()
         self.container.addLayout(self.graphContols)
@@ -90,16 +111,38 @@ class AnalysisView(QWidget):
         self.vectorTab = QWidget()
         self.vectorTab.setLayout(self.container)
 
-    def updateVectorList(self):
+    def vectorAdded(self):
+        self.vectorsCB.clear()
+        self.vectorsCB.addItem("")
         vectors = self.vectorManager.getVectors()
         for vector in vectors: 
-            icon = QIcon()
-            icon.addPixmap(QPixmap("app/images/dbicon.png"), QIcon.Normal, QIcon.Off)
-            item = QListWidgetItem()
-            item.setText(vector.getName()) 
-            item.setIcon(icon)
-            item.setSizeHint(QSize(0, 50))
-            #self.vectorWidget.addItem(item)
+            self.vectorsCB.addItem(vector.getName())
+
+    def vectorHandle(self, item):
+        vectorname = self.vectorsCB.currentText()
+        vector = self.vectorManager.getVectorByName(vectorname)
+        if vector == None: 
+            return 
+        # Update node tableview
+        nodeModel = self.nodes.model()
+        nodeModel.removeRows(0, nodeModel.rowCount())
+        for nodeId in vector.getNodes(): 
+            node = self.nodeManager.getNode(nodeId)
+            # "Name", "Timestamp", "Description", "Log Entry Refrence", "Log Creator", "Icon", "Source", "Visible"
+            nodeModel.appendRow([
+                QStandardItem(node.getName()), 
+                QStandardItem(node.getTimeStamp()), 
+                QStandardItem(node.getDesc()), 
+                QStandardItem(node.getLogEntryRef()), 
+                QStandardItem(node.getLogCreator()), 
+                QStandardItem(node.getIcon()), 
+                QStandardItem(node.getSource()), 
+                QStandardItem(node.getVisible())
+            ])
+        self.nodes.setModel(nodeModel)
+
+        # Todo add nodes to graph
+
 
     def addLogEntry(self, logentry):
         host = QStandardItem(logentry.getHost())
@@ -110,7 +153,7 @@ class AnalysisView(QWidget):
 
         testWidget = QtWidgets.QWidget()
         combobox = CheckableComboBox(testWidget)
-        #combobox.setModel(self.logEntryModel)
+        combobox.itemcheck_callback.connect(self.handelLogEntryChange)
         vectors = self.vectorManager.getVectors()
         for vector in vectors: 
             combobox.addItem(vector.name)
@@ -128,12 +171,21 @@ class AnalysisView(QWidget):
         a = self.logEntryModel.index(row, col)
         self.logEntriesTbl.setIndexWidget(a, combobox)
 
-    def setVectorSelected(self, item): 
-        selVecName = item.text()
-        self.vectorManager.setCurrentVector(selVecName)
+    def handelLogEntryChange(self, item): 
+        if item.checkState() == Qt.Checked: 
+            vectorName = item.text()
+            row = item.row()
+            logEntryContent = self.logEntryModel.item(row, 2).text()
+            logentry = self.logentryManager.getEntryByContent(logEntryContent)
+            vector = self.vectorManager.getVectorByName(vectorName)
+            self.vectorManager.associateLogEntry(logentry, vector)
+        else: 
+            # TODO: Remove association
+            print("uncheck")
+
 
 class CheckableComboBox(QComboBox):
-
+    itemcheck_callback = QtCore.pyqtSignal(QStandardItem)
     # Subclass Delegate to increase item height
     class Delegate(QStyledItemDelegate):
         def sizeHint(self, option, index):
@@ -190,6 +242,8 @@ class CheckableComboBox(QComboBox):
                     item.setCheckState(Qt.Unchecked)
                 else:
                     item.setCheckState(Qt.Checked)
+
+                self.itemcheck_callback.emit(item)
                 return True
         return False
 

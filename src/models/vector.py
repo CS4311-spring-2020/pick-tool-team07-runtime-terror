@@ -1,8 +1,8 @@
 class Vector(object):
-    def __init__(self, name, desc):
+    def __init__(self, name, desc, nodes):
         self.name = name
         self.description = desc
-        self.nodes = []
+        self.nodes = nodes
 
     def setName(self, name): 
         self.name = name
