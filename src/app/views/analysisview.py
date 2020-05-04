@@ -21,7 +21,6 @@ class AnalysisView(QWidget):
     def initUI(self): 
         self.setupMainLayout()
         self.setLayout(self.mainLayout)
-        self.testrow()
 
     def setupMainLayout(self): 
         #Log Entries table
@@ -42,13 +41,6 @@ class AnalysisView(QWidget):
         vectorLbl.setText("Vector Databases")
         vectorLbl.setTextAlignment(Qt.AlignCenter)
         vectorLbl.setFlags(Qt.NoItemFlags)
-
-        # Defined Vectors list
-        #self.vectorWidget = QListWidget()
-        #self.vectorWidget.setDragDropMode(QAbstractItemView.DragDrop)
-        #self.vectorWidget.setAcceptDrops(True)
-        #self.vectorWidget.addItem(vectorLbl)
-        #self.vectorWidget.itemActivated.connect(self.setVectorSelected)
 
         self.workspace = QHBoxLayout()
         #self.workspace.addWidget(self.vectorWidget, 10)
@@ -139,11 +131,6 @@ class AnalysisView(QWidget):
     def setVectorSelected(self, item): 
         selVecName = item.text()
         self.vectorManager.setCurrentVector(selVecName)
-
-    def testrow(self):
-        test_logEntry = LogEntry("host", "timestamp", "content", "source", "sourceType")
-        self.addLogEntry(test_logEntry)
-
 
 class CheckableComboBox(QComboBox):
 
