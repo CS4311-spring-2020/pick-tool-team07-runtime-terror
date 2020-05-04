@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 from PyQt5.QtCore import Qt, QDate, QDateTime
-=======
-from PyQt5.QtCore import Qt, QDateTime
->>>>>>> 71cff3c8de37dd0a37d5614f9e478adb2d7ae1f0
 from PyQt5.QtWidgets import QWidget, QVBoxLayout,QHBoxLayout, QLabel, QPushButton, QLineEdit, QDateTimeEdit
 
 class EventConfigWidget(QWidget):
@@ -58,8 +54,8 @@ class EventConfigWidget(QWidget):
         self.eventConfigManager.setEventAttributes(
             self.eventName.text(), 
             self.eventDescription.text(), 
-            self.startTime.dateTime().toUTC(),
-            self.endTime.dateTime().toUTC()
+            self.startTime.dateTime().toPyDateTime(),#.toUTC(),
+            self.endTime.dateTime().toPyDateTime()#.toUTC()
         )
         print(self.startTime.dateTime().toUTC().toString())
 
