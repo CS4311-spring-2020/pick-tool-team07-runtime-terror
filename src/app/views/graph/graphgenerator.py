@@ -3,14 +3,15 @@ from QGraphViz.DotParser import Graph
 from QGraphViz.Engines import Dot
 
 class GraphGenerator(object):
-    def __init__(self): 
+    def __init__(self, name): 
+        self.name = name
         self.avlbIndex = 0
         self.nodes = dict()
         self.qgv = QGraphViz(node_invoked_callback=self.nodeInvoked)
         self.setup()
 
     def setup(self):
-        self.qgv.new(Dot(Graph("Main_Graph")))
+        self.qgv.new(Dot(Graph(self.name)))
 
         # Leaving this here for examples
         # n1 = self.qgv.addNode(self.qgv.engine.graph, "Node1", label="N1")
@@ -28,9 +29,6 @@ class GraphGenerator(object):
         # self.qgv.addEdge(n3, n6, {"width":2})
 
         # self.build()
-
-    def generateVectorGraph(self, vector):
-        pass 
 
     def addNode(self, **kwargs):
         if kwargs['name']:
@@ -75,8 +73,8 @@ class GraphGenerator(object):
     def build(self):
         self.qgv.build()
 
-    def save(self, name):
-        filename = name + ".gv"
+    def save(self):
+        filename = self.name + ".gv"
         self.qgv.save(filename)
 
     def getGraph(self): 
@@ -87,7 +85,3 @@ class GraphGenerator(object):
 
     def nodeInvoked(self, node): 
         print(node)
-
-
-if __name__ == '__main__': 
-    GraphGenerator()
