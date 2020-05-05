@@ -92,7 +92,7 @@ class MainWindow(QMainWindow):
 
         if result == QDialog.Accepted: 
             EventConfigManager.get_instance().save()
-            self.analysisView.updateVectorList()
+            self.analysisView.vectorAdded()
 
             # TODO Start all processing threads
             cleansing_thread = CleansingThread()
