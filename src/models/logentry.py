@@ -1,30 +1,16 @@
 class LogEntry(object): 
-    def __init__(self, host, timestamp, content, source, sourceType): 
+    def __init__(self, number, host, timestamp, content, source, sourceType): 
         self.number = None
+        self.team = None
         self.timestamp = timestamp
         self.content = content
         self.host = host
         self.src = source
         self.srcType = sourceType
 
-    # def getNumber(self, num):
-    #     self.number = num
-
-    # def getTimestamp(self, timestamp): 
-    #     self.timestamp = timestamp
-
-    # def getContent(self, content): 
-    #     self.content = content
-
-    # def getHost(self, host):
-    #     self.host = host
-
-    # def getSource(self, src): 
-    #     self.src = src
-
-    # def getSourceType(self, srctype): 
-    #     self.srcType = srctype
-
+    def setNumber(self, number): 
+        self.number = number
+    
     def getNumber(self):
         return self.number
 

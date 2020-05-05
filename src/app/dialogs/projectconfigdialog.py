@@ -2,7 +2,7 @@ import sys
 sys.path.append("../..")
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayout, QHBoxLayout, QPushButton, QSpacerItem, QSizePolicy
+from PyQt5.QtWidgets import QDialog, QListWidget, QStackedWidget, QVBoxLayout, QHBoxLayout, QPushButton, QSpacerItem, QSizePolicy, QMessageBox
 
 from managers.eventconfigmanager import EventConfigManager
 
@@ -20,9 +20,9 @@ class ProjectConfigDialog(QDialog):
 
     def initUI(self): 
         self.resize(850,600)
-        self.teamConfig = TeamConfigWidget(parent=self, eventManager=self.eventConfigManager)
-        self.dirConfig = DirConfigWidget(parent=self, eventManager=self.eventConfigManager)
-        self.eventConfig = EventConfigWidget(parent=self, eventManager=self.eventConfigManager)
+        self.teamConfig = TeamConfigWidget(parent=self, eventManager=self.eventConfigManager, hide=True)
+        self.dirConfig = DirConfigWidget(parent=self, eventManager=self.eventConfigManager, hide=True)
+        self.eventConfig = EventConfigWidget(parent=self, eventManager=self.eventConfigManager, hide=True)
         self.vectorConfig = VectorConfigWidget(parent=self, eventManager=self.eventConfigManager)
         
         self.stack = QStackedWidget(self)
@@ -61,10 +61,56 @@ class ProjectConfigDialog(QDialog):
         self.setLayout(mainContainer)
 
     def start(self):
-        # TODO: Verify that all configuration is correctly setup
-        self.parent.updateView(2)
-        self.accept()
-        # self.done(0)
+
+        msg = QMessageBox()
+        msg.setWindowTitle("warning")
+        msg.setText("Please fill in missing fields")
+        msg.setIcon(QMessageBox.Critical)
+        msg.setStandardButtons(QMessageBox.Retry)
+
+        vec = self.vectorConfig.checkIfThereAreVectors() 
+        dirc = self.dirConfig.validateInputs()
+        eventc = self.eventConfig.validateInputs()
+        equalTime = self.eventConfig.validateTimeEqual()
+        startLater = self.eventConfig.validateTimeLater()
+        vecmsg = "Must have at least one vector"
+        dircmsg = "Directory Configuration"
+        eventmsg = "Event Configuration"
+        timeEqual = "Start and End time can not be equal"
+        timeStartLater = "End time can not be before start time"
+        
+        
+        l = [""]
+
+        if (vec and dirc and eventc and (not equalTime or not startLater)):
+            self.teamConfig.connect()
+            self.dirConfig.saveConfig()
+            self.eventConfig.save()
+            self.parent.updateView(1)
+            self.accept()
+        else:
+            if not vec:
+                l.append(vecmsg)
+                l.append("\n")
+            if not dirc:
+                l.append(dircmsg)
+                l.append("\n")
+            if not eventc:
+                l.append(eventmsg)
+                l.append("\n")
+            if (equalTime):
+                l.append("-"+timeEqual)
+                l.append("\n")
+            if (startLater):
+                l.append("-"+timeStartLater)
+                l.append("\n")
+            #list of msgs together and join them into single string 
+            msg.setInformativeText(''.join(l))
+            answer = msg.exec()
+            if answer == QMessageBox.Retry:
+                msg.close()
+        
+
 
     def cancel(self): 
         self.reject()

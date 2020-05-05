@@ -7,6 +7,7 @@ class LogEntryManager:
         if LogEntryManager.__instance == None: 
             LogEntryManager.__instance = self
             self.logEntries = []
+            self.total = 0
         else: 
             raise Exception("Trying to create another instance of a singelton class") 
     
@@ -25,16 +26,16 @@ class LogEntryManager:
         sourceType): 
 
         # Create Entry
-        logEntry = LogEntry(host, timestamp, content, source, sourceType)
+        logEntry = LogEntry(self.total, host, timestamp, content, source, sourceType)
 
         self.logEntries.append(logEntry)
+        self.total += 1
 
         # TODO: Need to add this log entry to log entry database in the case we do 
         # have a db for log entries
     
-    def getEntryByContent(self, content):   
+    def getEntryByContent(self, content): 
         for entry in self.logEntries: 
             if content == entry.getContent(): 
-                print(entry)
                 return entry
         return None
