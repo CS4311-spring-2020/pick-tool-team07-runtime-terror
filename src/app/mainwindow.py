@@ -1,7 +1,7 @@
 from PyQt5 import QtCore 
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMainWindow, QAction, QStackedLayout, QBoxLayout, QWidget,\
-                            QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QToolBar, QToolButton, QDialog
+                            QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QToolBar, QToolButton, QDialog, QButtonGroup
 
 from app.views.analysisview import AnalysisView
 from app.views.processingview import ProcessingView
@@ -45,25 +45,35 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.widget)
 
     def setupToolBar(self):
+        toolBar = QToolBar()
+        self.toolbar = self.addToolBar(toolBar)
+
         logProcessingView = QToolButton()
         logProcessingView.setText("Log Processing View")
+        logProcessingView.setCheckable(True)
         logProcessingView.clicked.connect(lambda: self.updateView(1))
-        
+
         analysisView = QToolButton()
         analysisView.setText("Analysis View")
+        analysisView.setCheckable(True)
         analysisView.clicked.connect(lambda: self.updateView(0))
 
         actionreportView = QToolButton()
         actionreportView.setText("Action Report")
+        actionreportView.setCheckable(True)
         actionreportView.clicked.connect(lambda: self.updateView(2))
 
+        group = QButtonGroup(self)
+        group.exclusive()
 
-        toolBar = QToolBar()
-        toolBar.addWidget(logProcessingView)
-        toolBar.addWidget(analysisView)
-        toolBar.addWidget(actionreportView)
+        for button in (
+                analysisView,
+                logProcessingView,
+                actionreportView
+        ):
+            toolBar.addWidget(button)
+            group.addButton(button)
 
-        self.toolbar = self.addToolBar(toolBar)
 
 
     def setupMenuBar(self): 
