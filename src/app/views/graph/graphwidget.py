@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QDialog, QHBoxLayout, QVBoxLayout, QPushButton, QFormLayout, QLineEdit, QComboBox, QLabel
-from app.views.graph.graphgenerator import GraphGenerator
+from app.views.graph.graphmanager import GraphManager
+from managers.nodemanager import NodeManager
 
 class AddNodeWidget(QWidget):
     def __init__(self, parent=None):
@@ -108,7 +109,9 @@ class AddEdgeWidget(QWidget):
 class GraphWidget(QWidget): 
     def __init__(self, parent=None): 
         super(QWidget, self).__init__(parent)
-        self.graphGenerator = GraphGenerator()
+        self.graphManager = GraphManager()
+        self.nodeManager = NodeManager()
+        self.vector = None
         self.initUI()
 
     def initUI(self): 
@@ -128,8 +131,22 @@ class GraphWidget(QWidget):
         # selectedVector = self.vectorManager.getCurrentVector()
         # if selectedVector: 
         #     graphGenerator.generateVectorGraph(selectedVector)
-        self.graphGenerator.build()
-        qgv = self.graphGenerator.getGraph()
+        # self.graphGenerator.build()
+        if self.vector: 
+            qgv = self.graphManager.getGraph(self.vector)
+            self.layout().addWidget(qgv)
+        else: 
+            self.layout().addWidget(QWidget())
+
+    def updateGraph(self, vector):
+        # clear current widget 
+        for i in reversed(range(self.layout().count())):
+            widget = self.layout().itemAt(i).widget()
+            if widget: 
+                widget.setParent(None)
+
+        self.vector = vector
+        qgv = self.graphManager.getGraph(self.vector)
         self.layout().addWidget(qgv)
 
     def addNode(self): 
@@ -150,13 +167,15 @@ class GraphWidget(QWidget):
             results=addNodeWidget.getResults()
             if results[2] == "image": 
                 #TODO validate path to image
-                self.graphGenerator.addNode(
+                self.graphManager.addNode(
+                    self.vector,
                     name= results[0], 
                     label= results[1], 
                     shape= results[3]
                 )
             else: 
-                self.graphGenerator.addNode(
+                self.graphManager.addNode(
+                    self.vector,
                     name= results[0], 
                     label= results[1], 
                     shape= results[2]
@@ -165,14 +184,15 @@ class GraphWidget(QWidget):
             # Just putting this here in case we need to handel the rejected case
             pass
 
-        self.graphGenerator.build()
-
     def addEdge(self): 
         # nodes = self.graphGenerator.getNodes()
         dlg = QDialog()
-
+        nodes = []
+        for id in self.vector.getNodes(): 
+            node = self.nodeManager.getNode(id)
+            nodes.append(node)
         addEdgeWidget = AddEdgeWidget(
-            [node.name for node in self.graphGenerator.getNodes()],
+            [node.getName() for node in nodes],
             dlg)
         dlg.setLayout(addEdgeWidget.layout())
 
@@ -182,6 +202,5 @@ class GraphWidget(QWidget):
 
         if result == QDialog.Accepted: 
             results=addEdgeWidget.getResults()
-            self.graphGenerator.addEdge(results[0], results[1])
-        self.graphGenerator.build()
+            self.graphManager.addEdge(self.vector, results[0], results[1])
 

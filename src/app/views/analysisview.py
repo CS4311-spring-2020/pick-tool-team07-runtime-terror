@@ -142,7 +142,7 @@ class AnalysisView(QWidget):
         self.nodes.setModel(nodeModel)
 
         # Todo add nodes to graph
-
+        self.graph.updateGraph(vector)
 
     def addLogEntry(self, logentry):
         host = QStandardItem(logentry.getHost())
