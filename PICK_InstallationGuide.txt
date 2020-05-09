@@ -1,0 +1,47 @@
+PICK SYSTEM: 
+
+
+
+
+
+PICK SYSTEM SOFTWARE DEPENDENCIES:
+
+PYTHON 3: 
+
+SPLUNK: You need to have SPLUNK installed on your machine. If not installed you can download a free version from here: https://www.splunk.com/en_us/download/splunk-enterprise.html or here https://dev.splunk.com/enterprise/downloads/
+
+//SPLUNK ENTERPRISE NEEDS TO BE INSTALLED BEFORE THIS
+SPLUNK SDK: [sudo] pip install splunk-sdk
+
+MONGODB: If not already installed you can install on your machine by going to this link and finding your operating system 
+https://docs.mongodb.com/manual/tutorial/install-mongodb-on-debian/
+
+PYMONGO: python3 -m pip install pymongo
+
+PyQt5: python3 -m pip install PyQt5
+
+QGraphViz: python3 -m pip install QGraphViz
+
+OCR: Pytesseract: 
+python3 -m pip install filetype
+python3 -m pip install pytesseract
+
+You have to install the OCR engine, so the following will work on linux machines: 
+sudo apt install tesseract-ocr
+sudo apt install libtesseract-dev
+
+HOW TO USE:
+
+Locate the picksystem.ini file in the config directory. Enter your SPLUNK credentials where the username and password fields are. For example username = [ENTER USERNAME HERE]. Save the file. 
+
+Shell script was provided, this shell script is only meant to be run in Linux environments it also does not check if the necessary services are installed in the machine, so need to write another script that checks for that and installes the necessary services. To run the script you have to do the following:
+
+chmod u+x pick.sh
+
+./pick.sh
+chmod command only has to be run once, this command gives executable permissions to the script. Once you run it once you dont have to do it again.
+
+This script takes care of starting splunk and mongo so you will not have to everytime.
+
+Now run the system and Start a new project.
+
